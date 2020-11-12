@@ -1,10 +1,24 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#                                                                                               #
+#                                     Rudolf-Diesel-Fachschule                                  # 
+#                                        script programming                                     #   
+#                                               wit-a                                           #
+#                                             tank Game                                         #
+#                                                                                               #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
 # Import the pygame library
 import pygame, sys, time, random
 from pygame.locals import *
 
 # multipler
 MULTIPLER = 20
+
+# game fields
 FIELDS = 30
+
+# frames per second update game window
+FPS = 60
 
 # create a game field
 game_window = pygame.display.set_mode((FIELDS * MULTIPLER, FIELDS * MULTIPLER))
@@ -22,7 +36,11 @@ BLACK = ( 0, 0, 0)
 WITHE  = ( 255, 255, 255)
 BRICK_COLOR = (143, 38, 0)
 
-# game map
+# game icons 
+
+
+
+# game map level 1
 game_map=[
 [0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
 [0,0,0,0,1, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 1,0,0,0,0,],
@@ -91,6 +109,6 @@ while game_active:
     pygame.display.flip()
 
     # define refresh times
-    clock.tick(10)
+    clock.tick(FPS)
 
 pygame.quit()
