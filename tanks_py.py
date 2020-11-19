@@ -1,15 +1,22 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #                                                                                               #
-#                                     Rudolf-Diesel-Fachschule                                  # 
-#                                        script programming                                     #   
+#                                     Rudolf-Diesel-Fachschule                                  #
+#                                        script programming                                     #
 #                                               wit-a                                           #
-#                                             tank Game                                         #
+#                                             Tank Game                                         #
+#                                                                                               #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                                                                      
+#                                                                                               #                                                                                         #
+#                                         File: tanks_py.py                                     #
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Import the pygame library
 import pygame, sys, time, random
 from pygame.locals import *
+
+# my Container with Maps
+from Map_Container import Map_Container
 
 # multipler
 MULTIPLER = 20
@@ -36,48 +43,11 @@ BLACK = ( 0, 0, 0)
 WITHE  = ( 255, 255, 255)
 BRICK_COLOR = (143, 38, 0)
 
-# game icons 
+# Game Level by start
+LEVEL = 1
 
-
-
-# game map level 1
-game_map=[
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 1,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0, 0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0, 0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0, 0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0,],
-
-[0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0, 0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0, 0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0, 0,0,0,0,1, 0,0,0,0,0, 1,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 1,0,0,0,0,],
-[0,0,0,0,1, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 1,0,0,0,0,],
-
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,1,1,1,1, 1,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,1,1, 1,1,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,1,0, 0,1,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-[0,0,0,0,0, 0,0,0,0,0, 0,0,0,1,0, 0,1,0,0,0, 0,0,0,0,0, 0,0,0,0,0,],
-]
+# curent Game Level
+current_map = Map_Container.load_Map(LEVEL)
 
 # background game window
 game_window.fill(GRAY)
@@ -88,14 +58,19 @@ def correction_factor(correction_number):
     return correction_number
 
 # draw a game element
-def draw_game_element(column,row):
-    pygame.draw.rect(game_window, BRICK_COLOR, [correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1])
+# ein pygame.draw und die Farbe übergeben 
+def draw_game_element(column, row, element_type):
+    if(element_type == 1):
+        pygame.draw.rect(game_window, BRICK_COLOR, [correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1])
+    if(element_type == 2):
+        pygame.draw.rect(game_window, WITHE, [correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1])
 
 # print bricks in dame
 for column in range(0,FIELDS):
     for row in range(0,FIELDS):
-        if game_map[row][column] != 0:
-            draw_game_element(column,row)
+        if current_map[row][column] != 0:
+            element_type = current_map[row][column]
+            draw_game_element(column,row,element_type)
 
 # main game loop
 while game_active:
