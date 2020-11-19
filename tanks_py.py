@@ -27,6 +27,10 @@ FIELDS = 30
 # frames per second update game window
 FPS = 60
 
+# static game/elements 
+IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
+IMAGE_BETON_WALL= pygame.image.load('pic/beton_wall.png')
+
 # create a game field
 game_window = pygame.display.set_mode((FIELDS * MULTIPLER, FIELDS * MULTIPLER))
 
@@ -61,9 +65,10 @@ def correction_factor(correction_number):
 # ein pygame.draw und die Farbe übergeben 
 def draw_game_element(column, row, element_type):
     if(element_type == 1):
-        pygame.draw.rect(game_window, BRICK_COLOR, [correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1])
+       game_window.blit(IMAGE_BRICK_WALL, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
     if(element_type == 2):
-        pygame.draw.rect(game_window, WITHE, [correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1])
+        game_window.blit(IMAGE_BETON_WALL, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+        # pygame.draw.rect(game_window, WITHE, [correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1])
 
 # print bricks in dame
 for column in range(0,FIELDS):
