@@ -1,7 +1,7 @@
-Ein Tank Spiel 
-1. mit mehreren Maps gerade 2 Maps 
+###### Tank Game 
+### 1. mit mehreren Maps gerade 2 Maps 
 
-2. die Map ist so aufgebaut 
+### 2. die Map ist so aufgebaut 
 
 Description of the numbers in the map:
         0   is a empty place
@@ -17,4 +17,6 @@ Description of the numbers in the map:
         6   is wather can let a shot through but not drive through, can't destryed
         7   is an wall that can't be destroyed
         
-TODO: Grafiken Importieren für unbewegliche emelente 
+<span style="color:red">
+        TODO: Grafiken Importieren für unbewegliche emelente
+</span>. 
