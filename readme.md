@@ -13,7 +13,6 @@ Description of the numbers in the map:
             if this destryed is GAME OVER
             if gamer have no more tanks is GAME OVER
             the gamer have 3 Lifs = 3 Tanks
-        
         6   is wather can let a shot through but not drive through, can't destryed
         7   is an wall that can't be destroyed
         
