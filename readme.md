@@ -17,5 +17,9 @@ Description of the numbers in the map:
         7   is an wall that can't be destroyed
         
 <span style="color:red">
-        TODO: Grafiken Importieren für unbewegliche emelente
+        TODO: 19.11 Grafiken Importieren für unbewegliche emelente  ~~Scratch this.~~
+        TODO: 26.11 Veränderungen in der Maps Dokumentieren
+        TODO: 26.11 Player Implmementieren
+        TODO: 26.11 Bewegungen der Player
+        TODO: shots implementieren
 </span>. 
