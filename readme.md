@@ -1,12 +1,12 @@
-<center># Tank Game 
-</center>
+# Tank Game 
+---
 ### Beschreibung des Projekts 
 
-
+---
 ### 1. Aktueler Stand
         Der Level 1 und die Map sind Fertig. 
         Unbewegliche Emlemente eingefügt: Mauer, Beton-Mauer, Wasser, Stab der Players.
-
+---
 ### 2. die Map ist so aufgebaut 
 
 Description of the numbers in the map:
@@ -21,8 +21,8 @@ Description of the numbers in the map:
                         if this destryed is GAME OVER
                         if gamer have no more tanks is GAME OVER
                         the gamer have 3 Lifs = 3 Tanks
-
-### TODO: 
+***
+### 3. TODO: 
 19.11 Grafiken Importieren für unbewegliche emelente
 26.11 Veränderungen in der Maps Dokumentieren
 26.11 Player Implmementieren
