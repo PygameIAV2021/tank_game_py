@@ -28,8 +28,16 @@ FIELDS = 30
 FPS = 60
 
 # static game/elements 
+
 IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
+
 IMAGE_BETON_WALL= pygame.image.load('pic/beton_wall.png')
+IMAGE_WATTER = pygame.image.load('pic/watter.png')
+
+IMAGE_BASE_LE_UP = pygame.image.load('pic/base_le_up.png')
+IMAGE_BASE_LE_DOWN = pygame.image.load('pic/base_le_down.png')
+IMAGE_BASE_RE_UP = pygame.image.load('pic/base_re_up.png')
+IMAGE_BASE_RE_DOWN = pygame.image.load('pic/base_re_down.png')
 
 # create a game field
 game_window = pygame.display.set_mode((FIELDS * MULTIPLER, FIELDS * MULTIPLER))
@@ -64,11 +72,22 @@ def correction_factor(correction_number):
 # draw a game element
 # ein pygame.draw und die Farbe übergeben 
 def draw_game_element(column, row, element_type):
-    if(element_type == 1):
+    if(element_type == 11):
        game_window.blit(IMAGE_BRICK_WALL, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
-    if(element_type == 2):
+    if(element_type == 21):
         game_window.blit(IMAGE_BETON_WALL, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
-        # pygame.draw.rect(game_window, WITHE, [correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1])
+    if(element_type == 32):
+       game_window.blit(IMAGE_WATTER, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+    if(element_type == 91):
+        game_window.blit(IMAGE_BASE_LE_UP, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))  
+    if(element_type == 93):
+        game_window.blit(IMAGE_BASE_LE_DOWN, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+    if(element_type == 92):
+        game_window.blit(IMAGE_BASE_RE_UP, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+    if(element_type == 94):
+        game_window.blit(IMAGE_BASE_RE_DOWN, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+    
+
 
 # print bricks in dame
 for column in range(0,FIELDS):
