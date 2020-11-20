@@ -2,10 +2,13 @@
 ---
 ### Beschreibung des Projekts 
 
+Spiel mit mehreren gegner tanks, und 
 ---
 ### 1. Aktueler Stand
+
         Der Level 1 und die Map sind Fertig. 
         Unbewegliche Emlemente eingefügt: Mauer, Beton-Mauer, Wasser, Stab der Players.
+        
 ---
 ### 2. die Map ist so aufgebaut 
 
@@ -14,7 +17,6 @@ Description of the numbers in the map:
         11              is a brick-wall this can be destroyed with 1 shot
         21              is a beton-wall this can't be destroyed
         32              is wather can let a shot through but not drive through, can't destryed
-        
         ??              is a possible burn point of opponent tanks
         ??              is a burn point of gamer 
         (91,92,93,94)   is a command point of gamer 
