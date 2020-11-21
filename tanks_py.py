@@ -39,6 +39,11 @@ IMAGE_BASE_LE_DOWN = pygame.image.load('pic/base_le_down.png')
 IMAGE_BASE_RE_UP = pygame.image.load('pic/base_re_up.png')
 IMAGE_BASE_RE_DOWN = pygame.image.load('pic/base_re_down.png')
 
+IMAGE_PLAYER_TANK_LEVEL_1 = pygame.image.load('pic/palyer_tank.png')
+
+IMAGE_GROUND_1 = pygame.image.load('pic/ground_1.png')
+
+
 # create a game field
 game_window = pygame.display.set_mode((FIELDS * MULTIPLER, FIELDS * MULTIPLER))
 
@@ -87,7 +92,19 @@ def draw_game_element(column, row, element_type):
     if(element_type == 94):
         game_window.blit(IMAGE_BASE_RE_DOWN, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
     
+def draw_player_tank(column, row):
+    game_window.blit(IMAGE_PLAYER_TANK_LEVEL_1, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
 
+def clear_old_position_of_player_tank(clumn, row):
+    game_window.blit(IMAGE_GROUND_1, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+
+# default burn poit of player is right oder left side from base
+player_column = 5
+player_row = 20
+
+# old position after moving tank 
+old_player_coumn = 0
+old_player_row = 0
 
 # print bricks in dame
 for column in range(0,FIELDS):
@@ -103,6 +120,26 @@ while game_active:
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             game_active = False
             print("GAME END BY USER")
+        keys = pygame.key.get_pressed()  #checking pressed keys
+        if keys[pygame.K_UP]:
+           old_player_row = player_row
+           player_row -= 1
+        if keys[pygame.K_DOWN]:
+            old_player_row = player_row
+            player_row += 1
+        if keys[pygame.K_LEFT]:
+           old_player_coumn = player_column
+           player_column -= 1
+        if keys[pygame.K_RIGHT]:
+            old_player_coumn = player_column
+            player_column += 1
+            
+    # game Logic
+
+    # draw the player tank and cler old position by moving
+    draw_player_tank(player_column, player_row)
+    clear_old_position_of_player_tank(old_player_coumn, old_player_row)
+
 
     # refresh game window
     pygame.display.flip()
