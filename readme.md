@@ -1,8 +1,10 @@
 # Tank Game 
 ---
 ### Beschreibung des Projekts 
+The player controls a tank and shoot projectiles to destroy enemy tanks around the playfield. The enemy tanks enter from the top of the screen and attempts to destroy the player's base (represented on the screen as a phoenix symbol), as well as the player's tank itself. A level is completed when the player destroys xx enemy tanks, but the game ends if the player's base is destroyed or the player loses all available lives. The player can destroy the base as well, so the player can still lose even after all enemy tanks are destroyed.
 
-Spiel mit mehreren gegner tanks, und 
+The game contain xx maps. Each map contains different types of terrain and obstacles. Examples include brick walls that can be destroyed by having either the player's tank or an enemy tank shoot at them. Beton walls con not be destroyed, patches of water which cannot be crossed by tanks. The enemy tanks come in four different sizes, with the largest one requiring four shots to destroy.
+
 ---
 ### 1. Aktueler Stand
 
