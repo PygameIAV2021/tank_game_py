@@ -37,9 +37,10 @@ Description of the numbers in the map:
 implement shots
 
 ---
----
+
 ### 4. Project 
 Project is being created in script programming at the Rudolf Diesel Technical School in Nuremberg.
+
 ---
 
 
