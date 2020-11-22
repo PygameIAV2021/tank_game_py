@@ -11,6 +11,10 @@
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+# 3 TODO
+# Prüfe die werte 20 in der Map
+
+
 # Import the pygame library
 import pygame, sys, time, random
 from pygame.locals import *
@@ -77,6 +81,8 @@ def correction_factor(correction_number):
 # draw a game element
 # ein pygame.draw und die Farbe übergeben 
 def draw_game_element(column, row, element_type):
+    if(element_type == 00):
+       game_window.blit(IMAGE_GROUND_1, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
     if(element_type == 11):
        game_window.blit(IMAGE_BRICK_WALL, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
     if(element_type == 21):
@@ -95,23 +101,28 @@ def draw_game_element(column, row, element_type):
 def draw_player_tank(column, row):
     game_window.blit(IMAGE_PLAYER_TANK_LEVEL_1, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
 
-def clear_old_position_of_player_tank(clumn, row):
+def clear_old_position_of_player_tank(column, row):
     game_window.blit(IMAGE_GROUND_1, ([correction_factor(column)+1, correction_factor(row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+
+#TODO: mache eine Funktion für die berechnung von der alten Postion
+#def calculate_old_position_of_tank(column):
+
 
 # default burn poit of player is right oder left side from base
 player_column = 5
 player_row = 20
 
 # old position after moving tank 
-old_player_coumn = 0
+old_player_column = 0
 old_player_row = 0
 
 # print bricks in dame
 for column in range(0,FIELDS):
     for row in range(0,FIELDS):
-        if current_map[row][column] != 0:
-            element_type = current_map[row][column]
-            draw_game_element(column,row,element_type)
+#TODO: Prüfen ob du es wirklich brauchst???
+        #if current_map[row][column] != 0: 
+        element_type = current_map[row][column]
+        draw_game_element(column,row,element_type)
 
 # main game loop
 while game_active:
@@ -122,23 +133,27 @@ while game_active:
             print("GAME END BY USER")
         keys = pygame.key.get_pressed()  #checking pressed keys
         if keys[pygame.K_UP]:
-           old_player_row = player_row
-           player_row -= 1
+            old_player_column = player_column
+            old_player_row = player_row
+            player_row -= 1
         if keys[pygame.K_DOWN]:
+            old_player_column = player_column
             old_player_row = player_row
             player_row += 1
         if keys[pygame.K_LEFT]:
-           old_player_coumn = player_column
-           player_column -= 1
+            old_player_column = player_column
+            old_player_row = player_row
+            old_player_column = player_column
+            player_column -= 1
         if keys[pygame.K_RIGHT]:
-            old_player_coumn = player_column
+            old_player_column = player_column
+            old_player_row = player_row
             player_column += 1
             
-    # game Logic
 
     # draw the player tank and cler old position by moving
+    clear_old_position_of_player_tank(old_player_column, old_player_row)
     draw_player_tank(player_column, player_row)
-    clear_old_position_of_player_tank(old_player_coumn, old_player_row)
 
 
     # refresh game window
