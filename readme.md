@@ -30,11 +30,13 @@ Description of the numbers in the map:  <br>
 
 
 ### 3. TODO: 
-19.11 Import graphics for immovable elements, Map Class is reday <br>
+~~19.11 Import graphics for immovable elements, Map Class is reday <br>~~
 26.11 Document changes in the maps  <br>
-26.11 Implement player  <br>
-11/26 Player Movements  <br>
-implement shots  <br>
+~~26.11 Implement player  <br>~~
+26.11 turning in the direction of travel tank <br>
+~~26.11 Player Movements  <br>~~
+26.11 implement shots  <br>
+
 
 ---
 
