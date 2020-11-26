@@ -116,6 +116,17 @@ player_row = 20
 old_player_column = player_column
 old_player_row = player_row
 
+# direction of player tank clockwise rotation
+# UP    --> 1
+# RIGHT --> 2
+# DOWN  --> 3
+# LEFT  --> 4
+player_tank_direction = 00
+
+# rotate of tank in deriction 
+def player_tank_rotate(tank ,player_tank_direction):
+    tank = pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1, player_tank_direction)
+
 # print ??? in dame
 for column in range(0,FIELDS):
     for row in range(0,FIELDS):
@@ -135,13 +146,20 @@ while game_active:
         if keys[pygame.K_UP]:
             old_player_column = player_column
             old_player_row = player_row
-            if ( player_row > 0 ) and ( current_map[old_player_row - 1][old_player_column] == 00 ):  
+            if player_tank_direction != 1:
+                player_tank_direction = 1
+                player_tank_rotate(IMAGE_PLAYER_TANK_LEVEL_1, 00)
+            if ( player_row > 0 ) and ( current_map[old_player_row - 1][old_player_column] == 00 ): 
                 player_row -= 1
             else:
                 player_row = player_row
         if keys[pygame.K_DOWN]:
             old_player_column = player_column
             old_player_row = player_row
+            # player_tank_direction = 4
+            if player_tank_direction != 4:
+                player_tank_direction = 4
+                player_tank_rotate(IMAGE_PLAYER_TANK_LEVEL_1, 180)
             if ( player_row < FIELDS - 1 ) and ( current_map[old_player_row + 1][old_player_column] == 00 ):  
                 player_row += 1
             else:
@@ -149,7 +167,10 @@ while game_active:
         if keys[pygame.K_LEFT]:
             old_player_column = player_column
             old_player_row = player_row
-            old_player_column = player_column
+            # player_tank_direction = 3
+            if player_tank_direction != 3:
+                player_tank_direction = 3
+                player_tank_rotate(IMAGE_PLAYER_TANK_LEVEL_1, 270)
             if ( player_column > 0 ) and ( current_map[old_player_row][old_player_column - 1] == 00 ):
                 player_column -= 1
             else:
@@ -158,6 +179,10 @@ while game_active:
         if keys[pygame.K_RIGHT]:
             old_player_column = player_column
             old_player_row = player_row
+            # player_tank_direction = 2
+            if player_tank_direction != 2:
+                player_tank_direction = 2
+                player_tank_rotate(IMAGE_PLAYER_TANK_LEVEL_1, 90)
             if ( player_column <  FIELDS - 1 ) and ( current_map[old_player_row][old_player_column + 1] == 00 ):
                 player_column += 1
             else:
