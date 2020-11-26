@@ -113,10 +113,10 @@ player_column = 5
 player_row = 20
 
 # old position after moving tank 
-old_player_column = 0
-old_player_row = 0
+old_player_column = player_column
+old_player_row = player_row
 
-# print bricks in dame
+# print ??? in dame
 for column in range(0,FIELDS):
     for row in range(0,FIELDS):
 #TODO: Prüfen ob du es wirklich brauchst???
@@ -135,22 +135,34 @@ while game_active:
         if keys[pygame.K_UP]:
             old_player_column = player_column
             old_player_row = player_row
-            player_row -= 1
+            if ( player_row > 0 ) and ( current_map[old_player_row - 1][old_player_column] == 00 ):  
+                player_row -= 1
+            else:
+                player_row = player_row
         if keys[pygame.K_DOWN]:
             old_player_column = player_column
             old_player_row = player_row
-            player_row += 1
+            if ( player_row < FIELDS - 1 ) and ( current_map[old_player_row + 1][old_player_column] == 00 ):  
+                player_row += 1
+            else:
+                player_row = player_row
         if keys[pygame.K_LEFT]:
             old_player_column = player_column
             old_player_row = player_row
             old_player_column = player_column
-            player_column -= 1
+            if ( player_column > 0 ) and ( current_map[old_player_row][old_player_column - 1] == 00 ):
+                player_column -= 1
+            else:
+                player_column = player_column
+            # pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1,90)
         if keys[pygame.K_RIGHT]:
             old_player_column = player_column
             old_player_row = player_row
-            player_column += 1
-            
-
+            if ( player_column <  FIELDS - 1 ) and ( current_map[old_player_row][old_player_column + 1] == 00 ):
+                player_column += 1
+            else:
+                player_column = player_column
+    
     # draw the player tank and cler old position by moving
     clear_old_position_of_player_tank(old_player_column, old_player_row)
     draw_player_tank(player_column, player_row)
