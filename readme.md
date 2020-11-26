@@ -45,6 +45,7 @@ Description of the numbers in the map:  <br>
 Project is being created in script programming at the Rudolf Diesel Technical School in Nuremberg.
 
 ---
-
-
+### 5. Lizenz 
+GPLv2.1
+---
 
