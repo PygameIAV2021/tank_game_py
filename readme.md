@@ -33,6 +33,7 @@ Description of the numbers in the map:  <br>
 
 
 ### 3. TODO: 
+
 ~~19.11 Import graphics for immovable elements~~
 ~~19.11 Map Class is reday <br>~~
 26.11 Document changes in the maps  <br>
