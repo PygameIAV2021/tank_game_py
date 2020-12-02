@@ -9,7 +9,10 @@ The game contain xx maps. Each map contains different types of terrain and obsta
 ### 2. Current status
 
 Level 1 and the map are done.
+
 Static/Immovable elements inserted: wall, beton wall, water, player's staff.
+
+Player tank moves, stays in the map and does not drive out, objects cannot be driven on
         
 ---
 ### 3. Description of the map 
@@ -34,11 +37,13 @@ Description of the numbers in the map:  <br>
 ~~19.11 Map Class is reday <br>~~
 26.11 Document changes in the maps  <br>
 ~~26.11 Implement player  <br>~~
-26.11 turning in the direction of travel tank <br>
+~~26.11 turning in the direction of travel tank <br>~~
 ~~26.11 Player Movements  <br>~~
-26.11 implement shots  <br>
-
-
+26.11/03.12 implement shots  <br>
+03.12 implement oponent tank 
+03.12 shots from oponent tanks
+10.12 Implement object player tank
+10.12 Implement stupid boot/ki for oponent tanks 
 ---
 
 ### 4. Project 
