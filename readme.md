@@ -41,6 +41,7 @@ Description of the numbers in the map:  <br>
 ~~26.11 turning in the direction of travel tank <br>~~
 ~~26.11 Player Movements  <br>~~
 26.11/03.12 implement shots  <br>
+clear old player position is obsolet 
 03.12 implement oponent tank 
 03.12 shots from oponent tanks
 10.12 Implement object player tank
