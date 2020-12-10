@@ -20,6 +20,8 @@ from pygame.locals import *
 
 # my Container with Maps
 from Map_Container import Map_Container
+# SHots 
+from my_shot import Shot
 
 # multipler
 MULTIPLER = 20
@@ -28,7 +30,7 @@ MULTIPLER = 20
 FIELDS = 30
 
 # frames per second update game window
-FPS = 10
+FPS = 5
 
 # static game/elements 
 
@@ -47,6 +49,7 @@ IMAGE_PLAYER_TANK_LEVEL_1 = pygame.image.load('pic/palyer_tank.png')
 IMAGE_GROUND_1 = pygame.image.load('pic/ground_1.png')
 
 IMAGE_BULLET = pygame.image.load('pic/bullet.png')
+IMAGE_EXPLOSION = pygame.image.load('pic/explosion.png')
 
 
 # create a game field
@@ -102,53 +105,14 @@ def draw_game_element(column, row, element_type):
 def draw_player_tank(postion_player_tank_column, postion_player_tank_row):
     game_window.blit(IMAGE_PLAYER_TANK_LEVEL_1, ([correction_factor(postion_player_tank_column)+1, correction_factor(postion_player_tank_row)+1,correction_factor(1)-1,correction_factor(1)-1]))
 
-def clear_old_position_of_player_tank(postion_player_tank_column, postion_player_tank_row):
-    game_window.blit(IMAGE_GROUND_1, ([correction_factor(postion_player_tank_column)+1, correction_factor(postion_player_tank_row)+1,correction_factor(1)-1,correction_factor(1)-1]))
 
 
-class Shot:
-    def __init__(self, player_direction, player_column, player_row, owner):
-        self.shot_direction = player_direction
-        self.position_coulm = player_column
-        self.position_row = player_row
-        self.old_position_coulm = 0
-        self.old_position_row = 0
-        self.owner = owner
-
-    def draw(self):
-        game_window.blit(IMAGE_BULLET, ([correction_factor(self.position_coulm)+1, correction_factor(self.position_row)+1,correction_factor(1)-1,correction_factor(1)-1]))
-    
-    def clear(self):
-        if self.shot_direction == 00:
-            self.old_position_row += 1
-        if self.shot_direction == 90:
-            self.old_position_coulm += 1
-        if self.shot_direction == 180:
-            self.old_position_row -= 1
-        if self.shot_direction == 270:
-            self.old_position_coulm -= 1
-        game_window.blit(IMAGE_GROUND_1, ([correction_factor(self.old_position_coulm)+1, correction_factor(self.old_position_row)+1,correction_factor(1)-1,correction_factor(1)-1]))
-
-    def shot_move(self):
-        if self.shot_direction == 00:
-            self.position_row -= 1
-        if self.shot_direction == 90:
-            self.position_coulm -= 1
-        if self.shot_direction == 180:
-            self.position_row += 1
-        if self.shot_direction == 270:
-            self.position_coulm += 1
        
-#TODO: mache eine Funktion für die berechnung von der alten Postion
-#def calculate_old_position_of_tank(column):
 
 # default burn poit of player is right oder left side from base
 player_column = 5
 player_row = 20
 
-# old position after moving tank 
-old_player_column = player_column
-old_player_row = player_row
 
 # direction of player tank clockwise rotation
 # UP    --> 00
@@ -161,7 +125,11 @@ player_tank_direction = 00
 def player_tank_rotate(tank ,player_tank_direction):
     tank = pygame.transform.rotate(tank, player_tank_direction)
 
-
+# Kolisionskontrolle 
+def collision_check_of_shot(position_column, position_row):
+    if current_map [position_column][position_row] != 00:
+        game_window.blit(IMAGE_EXPLOSION , ([correction_factor(position_column)+1, correction_factor(position_row)+1,correction_factor(1)-1,correction_factor(1)-1]))
+        current_map[position_column][position_row] = 00
 
 # Liste der Schüsse 
 shot_list = []
@@ -174,73 +142,64 @@ while game_active:
             game_active = False
             print("GAME END BY USER")
         keys = pygame.key.get_pressed()  #checking pressed keys
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE]:  # keyboard key space
             owner = 1
-            shot = Shot(player_tank_direction, player_column, player_row, owner)
+            shot = Shot(player_tank_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET)
             shot_list.append(shot)
-
-        if keys[pygame.K_UP]:
-            old_player_column = player_column
-            old_player_row = player_row
-            clear_old_position_of_player_tank(old_player_column, old_player_row)
+        if keys[pygame.K_UP]: # keyboard key up arrow
             if player_tank_direction != 00:
                 IMAGE_PLAYER_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1, (00 - player_tank_direction) )
                 player_tank_direction = 00
-            if ( player_row > 0 ) and ( current_map[old_player_row - 1][old_player_column] == 00 ): 
+            if ( player_row > 0 ) and ( current_map[player_row - 1][player_column] == 00 ): 
                 player_row -= 1
             else:
                 player_row = player_row
-        if keys[pygame.K_DOWN]:
-            old_player_column = player_column
-            old_player_row = player_row
-            clear_old_position_of_player_tank(old_player_column, old_player_row)    
+        if keys[pygame.K_DOWN]:  # keyboard key down arrow
             if player_tank_direction != 180:
                 IMAGE_PLAYER_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1, (180 - player_tank_direction) )
                 player_tank_direction = 180
-            if ( player_row < FIELDS - 1 ) and ( current_map[old_player_row + 1][old_player_column] == 00 ):  
+            if ( player_row < FIELDS - 1 ) and ( current_map[player_row + 1][player_column] == 00 ):  
                 player_row += 1
             else:
                 player_row = player_row
-        if keys[pygame.K_LEFT]:
-            old_player_column = player_column
-            old_player_row = player_row
-            clear_old_position_of_player_tank(old_player_column, old_player_row)
+        if keys[pygame.K_LEFT]:  # keyboard key left arrow
             if player_tank_direction != 90:
                 IMAGE_PLAYER_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1, (90 - player_tank_direction) )
                 player_tank_direction = 90
-
-            if ( player_column > 0 ) and ( current_map[old_player_row][old_player_column - 1] == 00 ):
+            if ( player_column > 0 ) and ( current_map[player_row][player_column - 1] == 00 ):
                 player_column -= 1
             else:
                 player_column = player_column
             # pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1,90)
-        if keys[pygame.K_RIGHT]:
-            old_player_column = player_column
-            old_player_row = player_row
-            clear_old_position_of_player_tank(old_player_column, old_player_row)
+        if keys[pygame.K_RIGHT]:  # keyboard key rigt arrow
             if player_tank_direction != 270:
                 IMAGE_PLAYER_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1, (270 - player_tank_direction) )
                 player_tank_direction = 270
-            if ( player_column <  FIELDS - 1 ) and ( current_map[old_player_row][old_player_column + 1] == 00 ):
+            if ( player_column <  FIELDS - 1 ) and ( current_map[player_row][player_column + 1] == 00 ):
                 player_column += 1
             else:
                 player_column = player_column
 
-        # print ??? in dame
+
     for column in range(0,FIELDS):
         for row in range(0,FIELDS): 
             element_type = current_map[row][column]
             draw_game_element(column,row,element_type)
 
-    # draw the player tank and 
-    clear_old_position_of_player_tank(old_player_column, old_player_row)
-    # clear old position by moving
-    draw_player_tank(player_column, player_row)
+    # position by moving
+    draw_player_tank(player_column , player_row)
+
+
     # shot 
     for shot in shot_list:
-        #shot.clear()
         shot.draw()
-        shot.shot_move()
+        if shot.shot_move() == False:
+            shot_list.remove(shot)
+
+
+
+        collision_check_of_shot(shot.position_column, shot.position_row)
+           
 
 
     # refresh game window
