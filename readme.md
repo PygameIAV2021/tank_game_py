@@ -10,6 +10,8 @@ The game contain xx maps. Each map contains different types of terrain and obsta
 ---
 ### 2. Current status
 
+curent screanshot:
+![alt text](https://ibb.co/VwhnXQ0?raw=true)
 Level 1 and the map are done.
 
 Static/Immovable elements inserted: wall, beton wall, water, player's staff.
