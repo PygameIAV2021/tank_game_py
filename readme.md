@@ -49,8 +49,8 @@ Description of the numbers in the map:  <br>
 ~~26.11 turning in the direction of travel tank <br>~~
 ~~26.11 Player Movements  <br>~~
 ~~26.11/03.12 implement shots for player <br>~~
-~~clear old player position is obsolet<br> ~~
-~~03.12 implement oponent tank<br> ~~
+~~clear old player position is obsolet<br>~~
+~~03.12 implement oponent tank<br>~~
 03.12 shots from oponent tanks<br>
 10.12 Implement object player tank<br>
 10.12 Implement stupid boot/ki for oponent tanks <br>
