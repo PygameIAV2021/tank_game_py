@@ -54,6 +54,7 @@ Description of the numbers in the map:  <br>
 10.12 Implement stupid boot/ki for oponent tanks 
 ~~16.12 moving for oponent tank~~
 ~~16.12 bug fix (by shots, moving) from player tank~~
+
 17.12 code maintenance
 ---
 
