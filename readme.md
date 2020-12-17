@@ -10,8 +10,8 @@ The game contain xx maps. Each map contains different types of terrain and obsta
 ---
 ### 2. Current status
 
-curent screanshot:
-![alt text](https://ibb.co/VwhnXQ0?raw=true)
+![curent screanshot:](https://github.com/wit-a/tank_game_py/blob/oop_versuch/Screenshot.jpg?raw=true)
+
 Level 1 and the map are done.
 
 Static/Immovable elements inserted: wall, beton wall, water, player's staff.
