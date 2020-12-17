@@ -92,12 +92,13 @@ current_map = Map_Container.load_Map(LEVEL)
 # background game window
 game_window.fill(GRAY)
 
+# default oponent tank direction
+oponent_tank_direction = DOWN
 
 # Calculate correction factor
 def correction_factor(correction_number):
     correction_number = correction_number * MULTIPLER
     return correction_number
-
 
 # draw static game element
 def draw_game_element(column, row, element_type):
@@ -134,67 +135,73 @@ def draw_game_element(column, row, element_type):
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
 
-
 # draw player tank
 def draw_player_tank(postion_player_tank_column, postion_player_tank_row):
     game_window.blit(IMAGE_PLAYER_TANK_LEVEL_1, (
     [correction_factor(postion_player_tank_column) + 1, correction_factor(postion_player_tank_row) + 1,
      correction_factor(1) - 1, correction_factor(1) - 1]))
 
-
 # draw oponent tank
 def draw_oponent_tank(position_oponent_tank_column, position_oponent_tank_row):
     global IMAGE_OPONENT_TANK_LEVEL_1
-    current_map[position_oponent_tank_column][position_oponent_tank_row] = 77
+    #current_map[position_oponent_tank_column][position_oponent_tank_row] = 77
     game_window.blit(IMAGE_OPONENT_TANK_LEVEL_1, (
     [correction_factor(position_oponent_tank_column) + 1, correction_factor(position_oponent_tank_row) + 1,
      correction_factor(1) - 1, correction_factor(1) - 1]))
 
+def moving_oponent_tank(oponent_tank_column_fk, oponent_tank_row_fk, oponent_tank_direction):
+    #print("moving_oponent_tank","direction",oponent_tank_direction)
+    global IMAGE_OPONENT_TANK_LEVEL_1, current_map, oponent_tank_column, oponent_tank_row
+    if oponent_tank_direction == UP:
+        if (oponent_tank_row_fk > 0) and (
+                current_map[oponent_tank_row_fk - 1][oponent_tank_column_fk] == EMPTY_PLACE_ON_MAP):
+            oponent_tank_row -= 1
+    if oponent_tank_direction == DOWN:
+        print("Bin hier Row:",oponent_tank_row_fk, "column", oponent_tank_column_fk)
+        if (oponent_tank_row_fk < FIELDS - 1) and (
+                current_map[oponent_tank_row_fk + 1][oponent_tank_column_fk] == EMPTY_PLACE_ON_MAP):
+            oponent_tank_row += 1
+    if oponent_tank_direction == LEFT:
+        if (oponent_tank_column_fk > 0) and (
+                current_map[oponent_tank_row_fk][oponent_tank_column_fk - 1] == EMPTY_PLACE_ON_MAP):
+            oponent_tank_column -= 1
+    if oponent_tank_direction == RIGHT:
+        if (oponent_tank_column_fk < FIELDS - 1) and (
+                current_map[oponent_tank_row_fk][oponent_tank_column_fk + 1] == EMPTY_PLACE_ON_MAP):
+            oponent_tank_column += 1
 
-def moving_oponent_tank(oponent_tank_column, oponent_tank_row, oponent_tank_direction, move_direction):
-    global IMAGE_OPONENT_TANK_LEVEL_1, current_map
-    if move_direction == 1:
-        if oponent_tank_direction != UP:
+def change_direction_oponent_tank( oponent_tank_direction_fk, moving_direction):
+    #print("moving_oponent_tank","direction",oponent_tank_direction,"moving direction",moving_direction)
+    global IMAGE_OPONENT_TANK_LEVEL_1, current_map, oponent_tank_direction
+    if moving_direction == 1:
+        if oponent_tank_direction_fk != UP:
             IMAGE_OPONENT_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_OPONENT_TANK_LEVEL_1,
                                                                  (UP - oponent_tank_direction))
             oponent_tank_direction = UP
-            if (oponent_tank_row > 0) and (
-                    current_map[oponent_tank_row - 1][oponent_tank_column] == EMPTY_PLACE_ON_MAP):
-                oponent_tank_row -= 1
-    if move_direction == 2:
-        if oponent_tank_direction != DOWN:
+    if moving_direction == 2:
+        if oponent_tank_direction_fk != DOWN:
             IMAGE_OPONENT_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_OPONENT_TANK_LEVEL_1,
                                                                  (DOWN - oponent_tank_direction))
             oponent_tank_direction = DOWN
-            if (oponent_tank_row < FIELDS - 1) and (
-                    current_map[oponent_tank_row + 1][oponent_tank_column] == EMPTY_PLACE_ON_MAP):
-                oponent_tank_row += 1
-    if move_direction == 3:
-        if oponent_tank_direction != LEFT:
+    if moving_direction == 3:
+        if oponent_tank_direction_fk != LEFT:
             IMAGE_OPONENT_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_OPONENT_TANK_LEVEL_1,
                                                                  (LEFT - oponent_tank_direction))
             oponent_tank_direction = LEFT
-            if (oponent_tank_column > 0) and (
-                    current_map[oponent_tank_row][oponent_tank_column - 1] == EMPTY_PLACE_ON_MAP):
-                oponent_tank_column -= 1
-    if move_direction == 4:
-        if oponent_tank_direction != RIGHT:
+    if moving_direction == 4:
+        if oponent_tank_direction_fk != RIGHT:
             IMAGE_OPONENT_TANK_LEVEL_1 = pygame.transform.rotate(IMAGE_OPONENT_TANK_LEVEL_1,
                                                                  (RIGHT - oponent_tank_direction))
             oponent_tank_direction = RIGHT
-            if (oponent_tank_row < FIELDS - 1) and (
-                    current_map[oponent_tank_row][oponent_tank_column + 1] == EMPTY_PLACE_ON_MAP):
-                oponent_tank_column += 1
-
 
 def what_does_the_opponent_want_to_do(oponent_tank_column, oponent_tank_row, oponent_tank_direction):
     # in order to increase the likelihood of drelosening, I roll the dice from 1 to 10 only with numbers between 1 and 4 the direction will change
     moving_direction = random.randrange(1, 51)
     if moving_direction in range(1, 5):
-        moving_oponent_tank(oponent_tank_column, oponent_tank_row, oponent_tank_direction, moving_direction)
+        change_direction_oponent_tank( oponent_tank_direction, moving_direction)
     else:
-        pass
-
+        #print("bewege dich","richtung:",oponent_tank_direction)
+        moving_oponent_tank(oponent_tank_column, oponent_tank_row, oponent_tank_direction)
 
 # default/burn settings for player tank
 # default player direction at start
@@ -204,37 +211,30 @@ player_tank_direction = UP
 player_column = 5
 player_row = 20
 
-# default oponent tank direction
-oponent_tank_direction = DOWN
-
 # default burn point of oponent tank
-oponent_tank_column = 1
-oponent_tank_row = 1
+oponent_tank_column = 2
+oponent_tank_row = 2
 
 # List of shots
 shot_list = []
-
 
 # rotate of tank in deriction
 def player_tank_rotate(tank, player_tank_direction):
     tank = pygame.transform.rotate(tank, player_tank_direction)
 
-
 # Collision control
 def collision_check_of_shot(shot):
     global shot_list, current_map, game_window, EMPTY_PLACE_ON_MAP
     if current_map[shot.position_row][shot.position_column] != EMPTY_PLACE_ON_MAP:
-        shot_list.remove(shot)
-        print("pos of shot (collision): ", shot.position_column, shot.position_row)
         game_window.blit(IMAGE_EXPLOSION, (
-        [correction_factor(shot.position_row) + 1, correction_factor(shot.position_column) + 1,
+        [correction_factor(shot.position_column) + 1, correction_factor(shot.position_row) + 1,
          correction_factor(1) - 1, correction_factor(1) - 1]))
         current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
-
+        shot_list.remove(shot)
+        print("pos of shot (collision): ", shot.position_column, shot.position_row)
 
 # main game loop
 while game_active:
-
     # Check whether the user has taken an event
     for event in pygame.event.get():
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
