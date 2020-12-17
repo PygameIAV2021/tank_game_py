@@ -10,6 +10,12 @@
 #                                       File: shot.py                                  #
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Mögliche Richtungen des Panzers
+UP = 00
+LEFT = 90
+DOWN = 180
+RIGHT = 270
+
 class Shot:
     def __init__(self, player_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET ):
         self.shot_direction = player_direction
@@ -22,24 +28,27 @@ class Shot:
         self.MULTIPLER = 20
 
 
-    # hier werden die abgegebenen Schüße gezeichnet.
+    # the shots fired are drawn here
     def draw(self):
         self.game_window.blit(self.IMAGE_BULLET, ([self.correction_factor(self.position_column)+1, self.correction_factor(self.position_row)+1, self.correction_factor(1)-1, self.correction_factor(1)-1]))
 
-    # für die abgabe des Schusses ist die Richtung von Tank entscheident.
+    # the direction of the tank is decisive for firing the shot.
     def shot_move(self):
-        if self.shot_direction == 00:
-            self.position_row -= 1
-        if self.shot_direction == 90:
-            self.position_column -= 1
-        if self.shot_direction == 180:
-            self.position_row += 1
-        if self.shot_direction == 270:
-            self.position_column += 1
-        if self.position_row > 31 or self.position_row <= 0 or self.position_column > 31 or self.position_column <= 0:
+        print("Move", self.position_column, self.position_row)
+        if self.shot_direction == UP:
+                self.position_row -= 1
+        if self.shot_direction == LEFT:
+                self.position_column -= 1
+        if self.shot_direction == DOWN:
+                self.position_row += 1
+        if self.shot_direction == RIGHT:
+                self.position_column += 1
+        # when the bullet leaves the playing field it should be removed from the list
+        if (self.position_column >= 30 or self.position_column <= 0) or (self.position_row >= 30 or self.position_row <= 0):
             return False
 
 
+    # Calculate correction factor
     def correction_factor(self, correction_number):
         correction_number = correction_number * self.MULTIPLER
         return correction_number
