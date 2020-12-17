@@ -1,5 +1,7 @@
 # Tank Game 
 ---
+My first Game
+---
 ### 1. Description of the project
 The player controls a tank and shoot projectiles to destroy enemy tanks around the playfield. The enemy tanks enter from the top of the screen and attempts to destroy the player's base (represented on the screen as a phoenix symbol), as well as the player's tank itself. A level is completed when the player destroys xx enemy tanks, but the game ends if the player's base is destroyed or the player loses all available lives. The player can destroy the base as well, so the player can still lose even after all enemy tanks are destroyed.
 
@@ -12,7 +14,11 @@ Level 1 and the map are done.
 
 Static/Immovable elements inserted: wall, beton wall, water, player's staff.
 
-Player tank moves, stays in the map and does not drive out, objects cannot be driven on
+Player tank moves, stays in the map and does not drive out,
+objects cannot be driven on.
+Shots are implemented for the player tank.
+The enemy tank is also implemented movements in the framework of the map.
+The control of opposing tanks is radmoic.
         
 ---
 ### 3. Description of the map 
@@ -36,16 +42,19 @@ Description of the numbers in the map:  <br>
 
 ~~19.11 Import graphics for immovable elements~~
 ~~19.11 Map Class is reday <br>~~
-26.11 Document changes in the maps  <br>
+~~26.11 Document changes in the maps  <br>~~
 ~~26.11 Implement player  <br>~~
 ~~26.11 turning in the direction of travel tank <br>~~
 ~~26.11 Player Movements  <br>~~
-26.11/03.12 implement shots  <br>
-clear old player position is obsolet 
-03.12 implement oponent tank 
+~~26.11/03.12 implement shots for player <br>~~
+~~clear old player position is obsolet ~~
+~~03.12 implement oponent tank ~~
 03.12 shots from oponent tanks
 10.12 Implement object player tank
 10.12 Implement stupid boot/ki for oponent tanks 
+~~16.12 moving for oponent tank~~
+~~16.12 bug fix (by shots, moving) from player tank~~
+17.12 code maintenance
 ---
 
 ### 4. Project 
@@ -53,8 +62,6 @@ Project is being created in script programming at the Rudolf Diesel Technical Sc
 
 ---
 ### 5. Lizenz 
-
-GPLv2.1
 
 ---
 
