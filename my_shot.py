@@ -34,7 +34,7 @@ class Shot:
 
     # the direction of the tank is decisive for firing the shot.
     def shot_move(self):
-        print("Move", self.position_column, self.position_row)
+        print("shot is hier", self.position_column, self.position_row)
         if self.shot_direction == UP:
                 self.position_row -= 1
         if self.shot_direction == LEFT:
