@@ -51,9 +51,9 @@ Description of the numbers in the map:  <br>
 ~~26.11/03.12 implement shots for player <br>~~
 ~~clear old player position is obsolet<br>~~
 ~~03.12 implement oponent tank<br>~~
-03.12 shots from oponent tanks<br>
+~~03.12 shots from oponent tanks<br>~~
 10.12 Implement object player tank<br>
-10.12 Implement stupid boot/ki for oponent tanks <br>
+~~10.12 Implement stupid boot for oponent tanks <br>~~
 ~~16.12 moving for oponent tank<br>~~
 ~~16.12 bug fix (by shots, moving) from player tank<br>~~
 
