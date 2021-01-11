@@ -7,14 +7,11 @@
 #                                                                                               #                              
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                                                                      
 #                                                                                               #
-#                                       File: shot.py                                  #
+#                                       File: shot.py                                           #
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Mögliche Richtungen des Panzers
-UP = 00
-LEFT = 90
-DOWN = 180
-RIGHT = 270
+from constant_variables.py import *
 
 class Shot:
     def __init__(self, player_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET ):
