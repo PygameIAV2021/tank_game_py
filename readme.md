@@ -10,7 +10,7 @@ The game contain xx maps. Each map contains different types of terrain and obsta
 ---
 ### 2. Current status
 
-![curent screanshot:](https://ibb.co/Y2PTWb9)
+![curent screanshot:](https://i.ibb.co/v1VvBD5/Screenshot-2021-01-13-190142.jpg)
 
 Level 1 and the map are done.
 
