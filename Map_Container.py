@@ -11,8 +11,6 @@
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-from constant_variables.py import *
-
 class Map_Container:
     """ 
         Map_Container contain start levels and 
