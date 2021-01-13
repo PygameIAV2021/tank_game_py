@@ -52,12 +52,20 @@ Description of the numbers in the map:  <br>
 ~~clear old player position is obsolet<br>~~
 ~~03.12 implement oponent tank<br>~~
 ~~03.12 shots from oponent tanks<br>~~
-10.12 Implement object player tank<br>
+~~10.12 Implement object player tank<br>~~
 ~~10.12 Implement stupid boot for oponent tanks <br>~~
 ~~16.12 moving for oponent tank<br>~~
 ~~16.12 bug fix (by shots, moving) from player tank<br>~~
+14.01.21 
+- code maintenance
+- opponents burning points flexible
+- Add opponents to a list
+- Shots for all opponents correct implement
+21.01.21
+- code maintenance
+- colisions control implement for tanks
+- seve and load function
 
-17.12 code maintenance
 ---
 
 ### 4. Project 
