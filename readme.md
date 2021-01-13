@@ -10,7 +10,7 @@ The game contain xx maps. Each map contains different types of terrain and obsta
 ---
 ### 2. Current status
 
-![curent screanshot:](https://github.com/wit-a/tank_game_py/blob/oop_versuch/Screenshot.jpg?raw=true)
+![curent screanshot:](https://ibb.co/Y2PTWb9)
 
 Level 1 and the map are done.
 
@@ -38,9 +38,12 @@ Description of the numbers in the map:  <br>
                         if gamer have no more tanks is GAME OVER  <br>
                         the gamer have 3 Lifs = 3 Tanks  <br>
 ***
+### 4. control of player tank
+Moving with arrow key UP,DOWN,LEFT,RIGHT
+Shot with space key 
 
 
-### 3. TODO: 
+### 5. TODO: 
 
 ~~19.11 Import graphics for immovable elements~~
 ~~19.11 Map Class is reday <br>~~
@@ -68,11 +71,11 @@ Description of the numbers in the map:  <br>
 
 ---
 
-### 4. Project 
+### 6. Project 
 Project is being created in script programming at the Rudolf Diesel Technical School in Nuremberg.
 
 ---
-### 5. Lizenz 
+### 7. Lizenz 
 
 ---
 
