@@ -21,7 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="constant_variables.py" />
     <Compile Include="Map_Container.py" />
+    <Compile Include="my_oponent.py" />
     <Compile Include="my_shot.py" />
     <Compile Include="tanks_py.py" />
   </ItemGroup>

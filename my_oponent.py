@@ -5,11 +5,9 @@
 #                                               wit-a                                           #
 #                                             Tank Game                                         #
 #                                                                                               #                              
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                                                                      
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # self.position_oponent_tank_row # # # # # # # # # # # # # # # # # # #                                                                      
 #                                                                                               #
-#                                       File: shot.py                                           #
+#                                       File: my_oponent.py                                     #
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# Mögliche Richtungen des Panzers
-
-
+pass
