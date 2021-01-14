@@ -27,6 +27,9 @@ from Map_Container import Map_Container
 # constant variables for Game
 import pygame
 
+# for music
+pygame.mixer.init()
+
 # multipler
 MULTIPLER = 20
 
@@ -73,6 +76,12 @@ IMAGE_PLAYER_TANK_LEVEL_1 = pygame.image.load('pic/palyer_tank.png')
 IMAGE_BULLET = pygame.image.load('pic/bullet.png')
 IMAGE_EXPLOSION = pygame.image.load('pic/explosion.png')
 IMAGE_OPONENT_TANK_LEVEL_1 = pygame.image.load('pic/oponent_tank.png')
+
+# music elements
+SOUND_SHOT = pygame.mixer.Sound('sounds/shot.wav')
+SOUND_HIT = pygame.mixer.Sound('sounds/shot_hit.wav')
+
+#pygame.mixer.music.play()
 
 # create a game field
 game_window = pygame.display.set_mode((FIELDS * MULTIPLER, FIELDS * MULTIPLER))
@@ -121,13 +130,15 @@ class Shot:
         self.IMAGE_BULLET = IMAGE_BULLET
         self.MULTIPLER = 20
 
+        SOUND_SHOT.play()
+
     # the shots fired are drawn here
     def draw(self):
         self.game_window.blit(self.IMAGE_BULLET, ([self.correction_factor(self.position_column)+1, self.correction_factor(self.position_row)+1, self.correction_factor(1)-1, self.correction_factor(1)-1]))
 
     # the direction of the tank is decisive for firing the shot.
     def shot_move(self):
-        print("shot is hier", self.position_column, self.position_row)
+        #print("shot is hier", self.position_column, self.position_row)
         if self.shot_direction == UP:
                 self.position_row -= 1
         if self.shot_direction == LEFT:
@@ -164,7 +175,6 @@ class Opponent:
          self.correction_factor(1) - 1, self.correction_factor(1) - 1]))
 
     def moving_opponent_tank(self, opponent_tank_column, opponent_tank_row , opponent_tank_direction):
-        print("moving_opponent_tank")
     # if the tank in the corner they must change direction and call function change direction?. 
     # the chances that it won't stick in the corner are greater....
         if ( self.opponent_tank_column == 0 and self.opponent_tank_row  == 0 ) and ( 
@@ -259,6 +269,7 @@ class Opponent:
             #print("bewege dich","richtung:",opponent_tank_direction)
             self.moving_opponent_tank(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
 
+
 # Calculate correction factor
 def correction_factor(correction_number):
     correction_number = correction_number * MULTIPLER
@@ -324,10 +335,12 @@ def player_tank_rotate(tank, player_tank_direction):
 # Collision control
 def collision_check_of_shot(shot):
     global shot_list, current_map, game_window, EMPTY_PLACE_ON_MAP
+
     if current_map[shot.position_row][shot.position_column] != EMPTY_PLACE_ON_MAP:
-        #game_window.blit(IMAGE_EXPLOSION, ([correction_factor(shot.position_column) + 1, correction_factor(shot.position_row) + 1,correction_factor(1) - 1, correction_factor(1) - 1]))
+        game_window.blit(IMAGE_EXPLOSION, ([shot.correction_factor(shot.position_column)+1, shot.correction_factor(shot.position_row)+1, shot.correction_factor(1)-1, shot.correction_factor(1)-1]))
         current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
         shot_list.remove(shot)
+        SOUND_HIT.play()
         print("owner:", shot.owner, "pos of shot (collision): ", shot.position_column, shot.position_row)
 
 # main game loop
@@ -342,6 +355,7 @@ while game_active:
         owner = 1
         shot = Shot(player_tank_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET)
         shot_list.append(shot)
+
         #print("Shotliste:", shot_list)
     if keys[pygame.K_1]:  # keyboard key 1 for test shot 
         print("1 gedrückt test opponent shot")
@@ -402,7 +416,7 @@ while game_active:
             # in all other cases a collision check takes place
             collision_check_of_shot(shot)
 
-    # draw dynamic game elements
+    # draw static game elements
     for column in range(0, FIELDS):
         for row in range(0, FIELDS):
             element_type = current_map[row][column]
