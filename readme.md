@@ -64,6 +64,7 @@ Shot with space key
 - opponents burning points flexible
 - Add opponents to a list
 - Shots for all opponents correct implement
+
 21.01.21
 - code maintenance
 - colisions control implement for tanks
