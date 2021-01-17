@@ -12,7 +12,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Import the pygame library
-import pygame, sys, time, random
+import pygame, sys, time, random, time
 from pygame.locals import *
 
 # import random numbers
@@ -60,6 +60,7 @@ BASE_LE_UP = 91
 BASE_LE_DOWN = 93
 BASE_RE_UP = 92
 BASE_RE_DOWN = 94
+EXPLOSION = range(7,1,1)
 
 # static game/elements 
 IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
@@ -74,14 +75,25 @@ IMAGE_GROUND_1 = pygame.image.load('pic/ground_1.png')
 # dynamic game elements
 IMAGE_PLAYER_TANK_LEVEL_1 = pygame.image.load('pic/palyer_tank.png')
 IMAGE_BULLET = pygame.image.load('pic/bullet.png')
-IMAGE_EXPLOSION = pygame.image.load('pic/explosion.png')
 IMAGE_OPONENT_TANK_LEVEL_1 = pygame.image.load('pic/oponent_tank.png')
 
-# music elements
+# sound elements
 SOUND_SHOT = pygame.mixer.Sound('sounds/shot.wav')
-SOUND_HIT = pygame.mixer.Sound('sounds/shot_hit.wav')
+SOUND_HIT_BRICK = pygame.mixer.Sound('sounds/shot_hit_brick.wav')
+SOUND_GAMEOVER = pygame.mixer.Sound('sounds/game_over.wav')
+SOUND_HIT_BETTON = pygame.mixer.Sound('sounds/shot_hit_betton.wav')
+SOUND_HIT_WATER = pygame.mixer.Sound('sounds/shot_hit_water.wav')
+SOUND_KEY_MOVING = pygame.mixer.Sound('sounds/key_moving.wav')
+SOUND_ENGINE = pygame.mixer.Sound('sounds/engine_player.wav')
 
-#pygame.mixer.music.play()
+# explosion 
+IMAGE_EXPLOSION_1 = pygame.image.load('dyn_pic/explosion/1.png')
+IMAGE_EXPLOSION_2 = pygame.image.load('dyn_pic/explosion/2.png')
+IMAGE_EXPLOSION_3 = pygame.image.load('dyn_pic/explosion/3.png')
+IMAGE_EXPLOSION_4 = pygame.image.load('dyn_pic/explosion/4.png')
+IMAGE_EXPLOSION_5 = pygame.image.load('dyn_pic/explosion/5.png')
+IMAGE_EXPLOSION_6 = pygame.image.load('dyn_pic/explosion/6.png')
+IMAGE_EXPLOSION_7 = pygame.image.load('dyn_pic/explosion/7.png')
 
 # create a game field
 game_window = pygame.display.set_mode((FIELDS * MULTIPLER, FIELDS * MULTIPLER))
@@ -116,8 +128,34 @@ player_column = 5
 player_row = 20
 
 # default burn point of opponent tank
-opponent_tank_column = 2
-opponent_tank_row = 2
+opponent_tank_column = random.randrange(1, 30, 1)
+opponent_tank_row = 1
+
+
+class Explosion():
+    def __init__(self, postion_row, position_column, MULTIPLER, 
+                 IMAGE_EXPLOSION_1,IMAGE_EXPLOSION_2,IMAGE_EXPLOSION_3,IMAGE_EXPLOSION_4,IMAGE_EXPLOSION_5,IMAGE_EXPLOSION_6,IMAGE_EXPLOSION_7):
+        self.postion_row = postion_row
+        self.postion_column = position_column
+        self.MULTIPLER = MULTIPLER
+        self.IMAGE_EXPLOSION_1 = IMAGE_EXPLOSION_1
+        self.IMAGE_EXPLOSION_2 = IMAGE_EXPLOSION_2
+        self.IMAGE_EXPLOSION_3 = IMAGE_EXPLOSION_3
+        self.IMAGE_EXPLOSION_4 = IMAGE_EXPLOSION_4
+        self.IMAGE_EXPLOSION_5 = IMAGE_EXPLOSION_5
+        self.IMAGE_EXPLOSION_6 = IMAGE_EXPLOSION_6
+        self.IMAGE_EXPLOSION_7 = IMAGE_EXPLOSION_7
+
+    # Calculate correction factor
+    def correction_factor(self, correction_number):
+        correction_number = correction_number * self.MULTIPLER
+        return correction_number
+
+    def update(self):
+        for i in range(7,1,1):
+            game_window.blit(f'IMAGE_EXPLOSION_{i}.png', ([correction_factor(self.postion_column) + 1, correction_factor(self.postion_row) + 1,
+                                              correction_factor(1) - 1,correction_factor(1) - 1]))
+
 
 class Shot:
     def __init__(self, player_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET ):
@@ -277,6 +315,34 @@ def correction_factor(correction_number):
 
 # draw static game element
 def draw_game_element(column, row, element_type):
+    if (element_type == '7'):
+        game_window.blit(IMAGE_EXPLOSION_7, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
+    if (element_type == '6'):
+        game_window.blit(IMAGE_EXPLOSION_6, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
+    if (element_type == '5'):
+        game_window.blit(IMAGE_EXPLOSION_5, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
+    if (element_type == '4'):
+        game_window.blit(IMAGE_EXPLOSION_4, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
+    if (element_type == '3'):
+        game_window.blit(IMAGE_EXPLOSION_3, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
+    if (element_type == '2'):
+        game_window.blit(IMAGE_EXPLOSION_2, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
+    if (element_type == '1'):
+        game_window.blit(IMAGE_EXPLOSION_1, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
     if (element_type == EMPTY_PLACE_ON_MAP):
         game_window.blit(IMAGE_GROUND_1, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
@@ -309,6 +375,11 @@ def draw_game_element(column, row, element_type):
         game_window.blit(IMAGE_BASE_RE_DOWN, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
+    if (element_type in range(EXPLOSION,45)):
+        game_window.blit(IMAGE_EXPLOSION, (
+        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+         correction_factor(1) - 1]))
+    
 
 # draw player tank
 def draw_player_tank(postion_player_tank_column, postion_player_tank_row):
@@ -322,11 +393,18 @@ shot_list = []
 # opponent list
 opponent_list = []
 
-opponent = Opponent(opponent_tank_direction, opponent_tank_row, opponent_tank_column, IMAGE_OPONENT_TANK_LEVEL_1 )
-opponent2 = Opponent(opponent_tank_direction, opponent_tank_row, opponent_tank_column, IMAGE_OPONENT_TANK_LEVEL_1 )
+# explosion list
+explosion_list = []
 
-opponent_list.append(opponent)
-opponent_list.append(opponent2)
+# Opponents in The currenty map
+    # Level1  = 2 oponents
+    # Level2  = 4 oponents
+if LEVEL == 1:
+    for count in range(3):
+        opponent_tank_column = random.randrange(1, 30, 1)
+        opponent_tank_row = 1
+        opponent = Opponent(opponent_tank_direction, opponent_tank_row, opponent_tank_column, IMAGE_OPONENT_TANK_LEVEL_1 )
+        opponent_list.append(opponent)
 
 # rotate of tank in deriction
 def player_tank_rotate(tank, player_tank_direction):
@@ -334,14 +412,37 @@ def player_tank_rotate(tank, player_tank_direction):
 
 # Collision control
 def collision_check_of_shot(shot):
-    global shot_list, current_map, game_window, EMPTY_PLACE_ON_MAP
-
+    global shot_list, current_map, game_window, EMPTY_PLACE_ON_MAP, game_active
     if current_map[shot.position_row][shot.position_column] != EMPTY_PLACE_ON_MAP:
-        game_window.blit(IMAGE_EXPLOSION, ([shot.correction_factor(shot.position_column)+1, shot.correction_factor(shot.position_row)+1, shot.correction_factor(1)-1, shot.correction_factor(1)-1]))
-        current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
-        shot_list.remove(shot)
-        SOUND_HIT.play()
-        print("owner:", shot.owner, "pos of shot (collision): ", shot.position_column, shot.position_row)
+        if ((current_map[shot.position_row][shot.position_column] == BASE_LE_DOWN) or 
+                (current_map[shot.position_row][shot.position_column] == BASE_LE_UP) or 
+                    (current_map[shot.position_row][shot.position_column] == BASE_RE_DOWN) or 
+                        (current_map[shot.position_row][shot.position_column] == BASE_RE_UP)):
+            current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
+            shot_list.remove(shot)
+            SOUND_HIT_BETTON.play()
+            print("GAME OVER")
+            SOUND_GAMEOVER.play()
+            time.sleep(1)
+            game_active = False
+        if current_map[shot.position_row][shot.position_column] == BETON_WAL:
+
+            shot_list.remove(shot)
+            SOUND_HIT_BETTON.play()
+            
+        if current_map[shot.position_row][shot.position_column] == WATER:
+            SOUND_HIT_WATER.play()
+        if current_map[shot.position_row][shot.position_column] == BRICK_WAL:
+            current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
+            current_map[shot.position_row][shot.position_column] = '7'
+            shot_list.remove(shot)
+            SOUND_HIT_BRICK.play()
+        #else:
+        #    current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
+        #    shot_list.remove(shot)
+        #    SOUND_HIT.play()
+        #    print("owner:", shot.owner, "pos of shot (collision): ", shot.position_column, shot.position_row)
+
 
 # main game loop
 while game_active:
@@ -355,8 +456,6 @@ while game_active:
         owner = 1
         shot = Shot(player_tank_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET)
         shot_list.append(shot)
-
-        #print("Shotliste:", shot_list)
     if keys[pygame.K_1]:  # keyboard key 1 for test shot 
         print("1 gedrückt test opponent shot")
         opponent.shot_from_opponent(opponent_tank_direction, opponent_tank_column, opponent_tank_row)
@@ -368,6 +467,9 @@ while game_active:
             player_tank_direction = UP
         if (player_row > 0) and (current_map[player_row - 1][player_column] == EMPTY_PLACE_ON_MAP):
             # check whether the tank is still in the field and the space in front of the tank is empty
+            SOUND_KEY_MOVING.play()
+            current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
+            current_map[player_row - 1][player_column] = '99'
             player_row -= 1
         else:
             player_row = player_row
@@ -379,6 +481,9 @@ while game_active:
             player_tank_direction = DOWN
         if (player_row < FIELDS - 1) and (current_map[player_row + 1][player_column] == EMPTY_PLACE_ON_MAP):
             # check whether the tank is still in the field and the space in front of the tank is empty
+            SOUND_KEY_MOVING.play()
+            current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
+            current_map[player_row + 1][player_column] = '99'
             player_row += 1
         else:
             player_row = player_row
@@ -390,6 +495,9 @@ while game_active:
             player_tank_direction = LEFT
         if (player_column > 0) and (current_map[player_row][player_column - 1] == EMPTY_PLACE_ON_MAP):
             # check whether the tank is still in the field and the space in front of the tank is empty
+            SOUND_KEY_MOVING.play()
+            current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
+            current_map[player_row][player_column - 1] = '99'
             player_column -= 1
         else:
             player_column = player_column
@@ -402,6 +510,9 @@ while game_active:
             player_tank_direction = RIGHT
         if (player_column < FIELDS - 1) and (current_map[player_row][player_column + 1] == EMPTY_PLACE_ON_MAP):
             # check whether the tank is still in the field and the space in front of the tank is empty
+            SOUND_KEY_MOVING.play()
+            current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
+            current_map[player_row][player_column + 1] = '99'
             player_column += 1
         else:
             player_column = player_column
@@ -419,6 +530,9 @@ while game_active:
     # draw static game elements
     for column in range(0, FIELDS):
         for row in range(0, FIELDS):
+            if current_map[row][column] == range(1,7,1):
+                print("ja")
+                current_map[row][column] =-1
             element_type = current_map[row][column]
             draw_game_element(column, row, element_type)
 
@@ -429,15 +543,20 @@ while game_active:
     draw_player_tank(player_column, player_row)
 
     # draw opponent tank on map
-
-    opponent.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-    opponent.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
-    opponent2.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-    opponent2.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
+    for enemies in opponent_list:
+        enemies.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
+        enemies.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
+    
+    #opponent2.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
+    #opponent2.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
+    
     # refresh game window
     pygame.display.flip()
 
     # define refresh times
     clock.tick(FPS)
+
+
+
 
 pygame.quit()
