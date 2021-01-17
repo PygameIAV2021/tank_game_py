@@ -61,7 +61,8 @@ Shot with space key
 ~~16.12 bug fix (by shots, moving) from player tank<br>~~
 14.01.21 
 - code maintenance
-- opponents burning points flexible
+~~opponents burning points flexible~~
+~~implement sounds~~
 - Add opponents to a list
 - Shots for all opponents correct implement
 
