@@ -6,7 +6,7 @@
 #                                             Tank Game                                         #
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #                                                                      
-#                                                                                               #                                                                                         #
+#                                                                                               #
 #                                         File: tanks_py.py                                     #
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -60,7 +60,7 @@ BASE_LE_UP = 91
 BASE_LE_DOWN = 93
 BASE_RE_UP = 92
 BASE_RE_DOWN = 94
-EXPLOSION = range(7,1,1)
+EXPLOSION = 7
 
 # static game/elements 
 IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
@@ -315,31 +315,31 @@ def correction_factor(correction_number):
 
 # draw static game element
 def draw_game_element(column, row, element_type):
-    if (element_type == '7'):
+    if (element_type == 7):
         game_window.blit(IMAGE_EXPLOSION_7, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == '6'):
+    if (element_type == 6):
         game_window.blit(IMAGE_EXPLOSION_6, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == '5'):
+    if (element_type == 5):
         game_window.blit(IMAGE_EXPLOSION_5, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == '4'):
+    if (element_type == 4):
         game_window.blit(IMAGE_EXPLOSION_4, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == '3'):
+    if (element_type == 3):
         game_window.blit(IMAGE_EXPLOSION_3, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == '2'):
+    if (element_type == 2):
         game_window.blit(IMAGE_EXPLOSION_2, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == '1'):
+    if (element_type == 1):
         game_window.blit(IMAGE_EXPLOSION_1, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
@@ -375,11 +375,6 @@ def draw_game_element(column, row, element_type):
         game_window.blit(IMAGE_BASE_RE_DOWN, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type in range(EXPLOSION,45)):
-        game_window.blit(IMAGE_EXPLOSION, (
-        [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
-         correction_factor(1) - 1]))
-    
 
 # draw player tank
 def draw_player_tank(postion_player_tank_column, postion_player_tank_row):
@@ -426,15 +421,13 @@ def collision_check_of_shot(shot):
             time.sleep(1)
             game_active = False
         if current_map[shot.position_row][shot.position_column] == BETON_WAL:
-
             shot_list.remove(shot)
             SOUND_HIT_BETTON.play()
-            
         if current_map[shot.position_row][shot.position_column] == WATER:
             SOUND_HIT_WATER.play()
         if current_map[shot.position_row][shot.position_column] == BRICK_WAL:
             current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
-            current_map[shot.position_row][shot.position_column] = '7'
+            current_map[shot.position_row][shot.position_column] = 1
             shot_list.remove(shot)
             SOUND_HIT_BRICK.play()
         #else:
@@ -530,11 +523,13 @@ while game_active:
     # draw static game elements
     for column in range(0, FIELDS):
         for row in range(0, FIELDS):
-            if current_map[row][column] == range(1,7,1):
+            if current_map[row][column] in range(1,8):
                 print("ja")
-                current_map[row][column] =-1
+                current_map[row][column] += 1
             element_type = current_map[row][column]
             draw_game_element(column, row, element_type)
+            if current_map[row][column] == 7:
+                current_map[row][column] = EMPTY_PLACE_ON_MAP
 
     for shot in shot_list:
         shot.draw()
