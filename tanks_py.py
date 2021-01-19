@@ -55,12 +55,14 @@ RIGHT = 270
 EMPTY_PLACE_ON_MAP = 00
 BRICK_WAL = 11
 BETON_WAL = 21
+EXPLOSION_ON_BETON_WALL = 14
 WATER = 32
 BASE_LE_UP = 91
 BASE_LE_DOWN = 93
 BASE_RE_UP = 92
 BASE_RE_DOWN = 94
 EXPLOSION = 7
+PLAYER_TANK = 99 # TODO use this 
 
 # static game/elements 
 IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
@@ -315,31 +317,31 @@ def correction_factor(correction_number):
 
 # draw static game element
 def draw_game_element(column, row, element_type):
-    if (element_type == 7):
+    if (element_type == 7 or element_type == 20):
         game_window.blit(IMAGE_EXPLOSION_7, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == 6):
+    if (element_type == 6 or element_type == 19):
         game_window.blit(IMAGE_EXPLOSION_6, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == 5):
+    if (element_type == 5 or element_type == 18):
         game_window.blit(IMAGE_EXPLOSION_5, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == 4):
+    if (element_type == 4 or element_type == 17):
         game_window.blit(IMAGE_EXPLOSION_4, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == 3):
+    if (element_type == 3 or element_type == 16):
         game_window.blit(IMAGE_EXPLOSION_3, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == 2):
+    if (element_type == 2 or element_type == 15):
         game_window.blit(IMAGE_EXPLOSION_2, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
-    if (element_type == 1):
+    if (element_type == 1 or element_type == 14):
         game_window.blit(IMAGE_EXPLOSION_1, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
@@ -421,6 +423,7 @@ def collision_check_of_shot(shot):
             time.sleep(1)
             game_active = False
         if current_map[shot.position_row][shot.position_column] == BETON_WAL:
+            current_map[shot.position_row][shot.position_column] = EXPLOSION_ON_BETON_WALL
             shot_list.remove(shot)
             SOUND_HIT_BETTON.play()
         if current_map[shot.position_row][shot.position_column] == WATER:
@@ -524,12 +527,17 @@ while game_active:
     for column in range(0, FIELDS):
         for row in range(0, FIELDS):
             if current_map[row][column] in range(1,8):
-                print("ja")
                 current_map[row][column] += 1
             element_type = current_map[row][column]
             draw_game_element(column, row, element_type)
             if current_map[row][column] == 7:
-                current_map[row][column] = EMPTY_PLACE_ON_MAP
+                current_map[row][column] = EMPTY_PLACE_ON_MAP   # TODO use a function for this 
+            if current_map[row][column] in range(14,21):
+                current_map[row][column] += 1
+            element_type = current_map[row][column]
+            draw_game_element(column, row, element_type)
+            if current_map[row][column] == 20:
+                current_map[row][column] = BETON_WAL
 
     for shot in shot_list:
         shot.draw()
