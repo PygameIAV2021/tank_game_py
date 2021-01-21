@@ -13,10 +13,8 @@
 
 # Import the pygame library
 import pygame, sys, time, random, time
+import pygame. freetype
 from pygame.locals import *
-
-# import random numbers
-import random
 
 # my Container with Maps
 from Map_Container import Map_Container
@@ -62,7 +60,7 @@ BASE_LE_DOWN = 93
 BASE_RE_UP = 92
 BASE_RE_DOWN = 94
 EXPLOSION = 7
-PLAYER_TANK = 99 # TODO use this 
+PLAYER_TANK = 99 # TODO1 use this 
 
 # static game/elements 
 IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
@@ -98,7 +96,8 @@ IMAGE_EXPLOSION_6 = pygame.image.load('dyn_pic/explosion/6.png')
 IMAGE_EXPLOSION_7 = pygame.image.load('dyn_pic/explosion/7.png')
 
 # create a game field
-game_window = pygame.display.set_mode((FIELDS * MULTIPLER, FIELDS * MULTIPLER))
+# 120 pix is the place for dashboard
+game_window = pygame.display.set_mode((120 + FIELDS * MULTIPLER, FIELDS * MULTIPLER))
 
 # head title of game window
 pygame.display.set_caption("Tanks")
@@ -132,32 +131,6 @@ player_row = 20
 # default burn point of opponent tank
 opponent_tank_column = random.randrange(1, 30, 1)
 opponent_tank_row = 1
-
-
-class Explosion():
-    def __init__(self, postion_row, position_column, MULTIPLER, 
-                 IMAGE_EXPLOSION_1,IMAGE_EXPLOSION_2,IMAGE_EXPLOSION_3,IMAGE_EXPLOSION_4,IMAGE_EXPLOSION_5,IMAGE_EXPLOSION_6,IMAGE_EXPLOSION_7):
-        self.postion_row = postion_row
-        self.postion_column = position_column
-        self.MULTIPLER = MULTIPLER
-        self.IMAGE_EXPLOSION_1 = IMAGE_EXPLOSION_1
-        self.IMAGE_EXPLOSION_2 = IMAGE_EXPLOSION_2
-        self.IMAGE_EXPLOSION_3 = IMAGE_EXPLOSION_3
-        self.IMAGE_EXPLOSION_4 = IMAGE_EXPLOSION_4
-        self.IMAGE_EXPLOSION_5 = IMAGE_EXPLOSION_5
-        self.IMAGE_EXPLOSION_6 = IMAGE_EXPLOSION_6
-        self.IMAGE_EXPLOSION_7 = IMAGE_EXPLOSION_7
-
-    # Calculate correction factor
-    def correction_factor(self, correction_number):
-        correction_number = correction_number * self.MULTIPLER
-        return correction_number
-
-    def update(self):
-        for i in range(7,1,1):
-            game_window.blit(f'IMAGE_EXPLOSION_{i}.png', ([correction_factor(self.postion_column) + 1, correction_factor(self.postion_row) + 1,
-                                              correction_factor(1) - 1,correction_factor(1) - 1]))
-
 
 class Shot:
     def __init__(self, player_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET ):
@@ -300,14 +273,14 @@ class Opponent:
     def what_does_the_opponent_want_to_do(self, opponent_tank_column, opponent_tank_row, opponent_tank_direction):
         #print("column:", opponent_tank_column, "row:", opponent_tank_row, "direction:" ,opponent_tank_direction)
         # in order to increase the likelihood of drelosening, I roll the dice from 1 to 10 only with numbers between 1 and 4 the direction will change
-        moving_direction = random.randrange(1, 51)
+        moving_direction = random.randrange(1, 81)
         if moving_direction in range(1, 5):
             self.change_direction_opponent_tank( opponent_tank_direction, moving_direction)
-        if moving_direction in range(5,51,2):
-            pass
-        else:
-            #print("bewege dich","richtung:",opponent_tank_direction)
+        if moving_direction in range(5,81,3):
             self.moving_opponent_tank(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
+            #print("bewege dich","richtung:",opponent_tank_direction)
+        #if moving_direction in range(10,25,1):
+        #   self.shot_from_opponent(self, self.opponent_tank_direction, self.opponent_tank_column, self.opponent_tank_row)
 
 
 # Calculate correction factor
@@ -393,15 +366,24 @@ opponent_list = []
 # explosion list
 explosion_list = []
 
+# insert opponent depending on the map
+def add_opponent_tank_to_level(number_of_opponents):
+    for count in range(number_of_opponents):
+        opponent_tank_column = random.randrange(1, 30, 1)
+        opponent_tank_row = random.randrange(1,2,1)
+        opponent = Opponent(opponent_tank_direction, opponent_tank_row, opponent_tank_column, IMAGE_OPONENT_TANK_LEVEL_1 )
+        opponent_list.append(opponent)
+
+# depending on the level, the number of opponents differs 
 # Opponents in The currenty map
     # Level1  = 2 oponents
     # Level2  = 4 oponents
 if LEVEL == 1:
-    for count in range(3):
-        opponent_tank_column = random.randrange(1, 30, 1)
-        opponent_tank_row = 1
-        opponent = Opponent(opponent_tank_direction, opponent_tank_row, opponent_tank_column, IMAGE_OPONENT_TANK_LEVEL_1 )
-        opponent_list.append(opponent)
+    number_of_opponents = 2
+    add_opponent_tank_to_level(number_of_opponents)
+if LEVEL == 2:
+    number_of_opponents = 4
+    add_opponent_tank_to_level(number_of_opponents)
 
 # rotate of tank in deriction
 def player_tank_rotate(tank, player_tank_direction):
@@ -409,7 +391,7 @@ def player_tank_rotate(tank, player_tank_direction):
 
 # Collision control
 def collision_check_of_shot(shot):
-    global shot_list, current_map, game_window, EMPTY_PLACE_ON_MAP, game_active
+    global shot_list, current_map, game_window, EMPTY_PLACE_ON_MAP, game_active, opponent_list
     if current_map[shot.position_row][shot.position_column] != EMPTY_PLACE_ON_MAP:
         if ((current_map[shot.position_row][shot.position_column] == BASE_LE_DOWN) or 
                 (current_map[shot.position_row][shot.position_column] == BASE_LE_UP) or 
@@ -433,12 +415,16 @@ def collision_check_of_shot(shot):
             current_map[shot.position_row][shot.position_column] = 1
             shot_list.remove(shot)
             SOUND_HIT_BRICK.play()
+        #if current_map[shot.position_row][shot.position_column] == current_map[opponent.opponent_tank_row][opponent.opponent_tank_column]:
+         #   print("hit")
         #else:
         #    current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
         #    shot_list.remove(shot)
         #    SOUND_HIT.play()
         #    print("owner:", shot.owner, "pos of shot (collision): ", shot.position_column, shot.position_row)
 
+def explosion(row,clumn0):
+    pass #TODO2
 
 # main game loop
 while game_active:
@@ -531,7 +517,7 @@ while game_active:
             element_type = current_map[row][column]
             draw_game_element(column, row, element_type)
             if current_map[row][column] == 7:
-                current_map[row][column] = EMPTY_PLACE_ON_MAP   # TODO use a function for this 
+                current_map[row][column] = EMPTY_PLACE_ON_MAP   # TODO2 use a function for this 
             if current_map[row][column] in range(14,21):
                 current_map[row][column] += 1
             element_type = current_map[row][column]
@@ -539,6 +525,7 @@ while game_active:
             if current_map[row][column] == 20:
                 current_map[row][column] = BETON_WAL
 
+    
     for shot in shot_list:
         shot.draw()
 
@@ -558,8 +545,6 @@ while game_active:
 
     # define refresh times
     clock.tick(FPS)
-
-
 
 
 pygame.quit()
