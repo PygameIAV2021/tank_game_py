@@ -12,9 +12,10 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Import the pygame library
-import pygame, sys, time, random, time
+import pygame, sys, time, random, time, os
 import pygame. freetype
 from pygame.locals import *
+from os import path 
 
 # my Container with Maps
 from Map_Container import Map_Container
@@ -95,15 +96,30 @@ IMAGE_EXPLOSION_5 = pygame.image.load('dyn_pic/explosion/5.png')
 IMAGE_EXPLOSION_6 = pygame.image.load('dyn_pic/explosion/6.png')
 IMAGE_EXPLOSION_7 = pygame.image.load('dyn_pic/explosion/7.png')
 
+# screen images
+IMAGE_SCREEN_PAUSE = pygame.image.load('pic/pause.jpg')
+IMAGE_SCREEN_GEBU = pygame.image.load('pic/game_end_by_user.jpg')
+
+
+# Font
+
+pygame.freetype.init()
+FONT_1 = pygame.freetype.Font('fonts/hussarbold/HussarBd.otf',36)
+
 # create a game field
 # 120 pix is the place for dashboard
-game_window = pygame.display.set_mode((120 + FIELDS * MULTIPLER, FIELDS * MULTIPLER))
+# surface = game_window
+game_window = pygame.display.set_mode((1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER))
+pause_fenster = pygame.display.set_mode((1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER))
+print(1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER)
 
 # head title of game window
 pygame.display.set_caption("Tanks")
 
-# game is active
+# set game aktive, pause false, game_end_bu false
 game_active = True
+pause = False
+game_end_bu = False
 
 # Set screen updates
 clock = pygame.time.Clock()
@@ -131,6 +147,54 @@ player_row = 20
 # default burn point of opponent tank
 opponent_tank_column = random.randrange(1, 30, 1)
 opponent_tank_row = 1
+
+# fonts and texts
+def player_name():
+    FONT_1.render_to(world, (4, 4), "Score:", BLACK, None, size=32)
+
+font_name = pygame.font.match_font("arial")
+
+# show the pause screen 
+def show_pause_screen():
+    pause_fenster.fill(BLACK)
+    pause_fenster.blit(IMAGE_SCREEN_PAUSE , ([1, 1, 50,50]))
+
+def show_game_end_by_user():
+    pause_fenster.fill(BLACK)
+    pause_fenster.blit(IMAGE_SCREEN_GEBU, ([1, 1, 50,50]))
+
+def do_game_end_by_user():
+    global game_active
+    show_game_end_by_user()
+    pygame.display.flip()
+    close_game = True
+    while close_game:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                close_game = False
+                game_active = False
+                print("GAME END BY USER")
+
+# pause func
+def do_pause():
+    global game_active
+    show_pause_screen()
+    pygame.display.flip()
+    warte_zeit = True
+    while warte_zeit:
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                do_game_end_by_user()
+                warte_zeit = False
+                pause = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_2:
+                    warte_zeit = False
+
+
+
 
 class Shot:
     def __init__(self, player_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET ):
@@ -415,8 +479,8 @@ def collision_check_of_shot(shot):
             current_map[shot.position_row][shot.position_column] = 1
             shot_list.remove(shot)
             SOUND_HIT_BRICK.play()
-        #if current_map[shot.position_row][shot.position_column] == current_map[opponent.opponent_tank_row][opponent.opponent_tank_column]:
-         #   print("hit")
+        if current_map[shot.position_row][shot.position_column] == current_map[opponent.opponent_tank_row][opponent.opponent_tank_column]:
+            print("hit")
         #else:
         #    current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
         #    shot_list.remove(shot)
@@ -426,13 +490,19 @@ def collision_check_of_shot(shot):
 def explosion(row,clumn0):
     pass #TODO2
 
+
 # main game loop
 while game_active:
+    if pause:
+        do_pause()
+        pause = False
+    if game_end_bu:
+        do_game_end_by_user()
+        game_end_bu = True
     # Check whether the user has taken an event
     for event in pygame.event.get():
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-            game_active = False
-            print("GAME END BY USER")
+            do_game_end_by_user()
     keys = pygame.key.get_pressed()  # checking pressed keys
     if keys[pygame.K_SPACE]:  # keyboard key space
         owner = 1
@@ -441,6 +511,9 @@ while game_active:
     if keys[pygame.K_1]:  # keyboard key 1 for test shot 
         print("1 gedrückt test opponent shot")
         opponent.shot_from_opponent(opponent_tank_direction, opponent_tank_column, opponent_tank_row)
+    if keys[pygame.K_2]:  # keyboard key 1 for pause 
+        print("2  gedrückt Pause")
+        do_pause()
     if keys[pygame.K_UP]:  # keyboard key up arrow
         if player_tank_direction != UP:  # UP = 00*
             # rotation of the icon player tank
@@ -533,9 +606,9 @@ while game_active:
     draw_player_tank(player_column, player_row)
 
     # draw opponent tank on map
-    for enemies in opponent_list:
-        enemies.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-        enemies.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
+    for opponent in opponent_list:
+        opponent.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
+        opponent.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
     
     #opponent2.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
     #opponent2.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
