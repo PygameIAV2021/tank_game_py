@@ -12,7 +12,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # Import the pygame library
-import pygame, sys, time, random, time, os
+import pygame, sys, time, random, time, os, webbrowser
 import pygame. freetype
 from pygame.locals import *
 from os import path 
@@ -25,6 +25,9 @@ from Map_Container import Map_Container
 
 # constant variables for Game
 import pygame
+
+# inziealisierung von pygame
+pygame.init()
 
 # for music
 pygame.mixer.init()
@@ -41,9 +44,10 @@ FPS = 5
 # colors in game
 GRAY = (138, 138, 138)
 BLACK = (0, 0, 0)
-WITHE = (255, 255, 255)
+WHITE = (255, 255, 255)
 BRICK_COLOR = (143, 38, 0)
-
+RED = (255, 96,104 )
+GREEN = (51,113,57)
 # possible directions of tank and shots
 UP = 00
 LEFT = 90
@@ -86,6 +90,7 @@ SOUND_HIT_BETTON = pygame.mixer.Sound('sounds/shot_hit_betton.wav')
 SOUND_HIT_WATER = pygame.mixer.Sound('sounds/shot_hit_water.wav')
 SOUND_KEY_MOVING = pygame.mixer.Sound('sounds/key_moving.wav')
 SOUND_ENGINE = pygame.mixer.Sound('sounds/engine_player.wav')
+SOUND_GAME_PAUSE = pygame.mixer.Sound('sounds/game_pause.wav')
 
 # explosion 
 IMAGE_EXPLOSION_1 = pygame.image.load('dyn_pic/explosion/1.png')
@@ -99,36 +104,29 @@ IMAGE_EXPLOSION_7 = pygame.image.load('dyn_pic/explosion/7.png')
 # screen images
 IMAGE_SCREEN_PAUSE = pygame.image.load('pic/pause.jpg')
 IMAGE_SCREEN_GEBU = pygame.image.load('pic/game_end_by_user.jpg')
+IMAGE_SCREEN_MENU = pygame.image.load('pic/start_screen.jpg')
 
-
-# Font
-
-pygame.freetype.init()
-FONT_1 = pygame.freetype.Font('fonts/hussarbold/HussarBd.otf',36)
-
+# screen resolution  
+screen_resolution = (1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER)
 # create a game field
 # 120 pix is the place for dashboard
 # surface = game_window
-game_window = pygame.display.set_mode((1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER))
-pause_fenster = pygame.display.set_mode((1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER))
-print(1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER)
+game_window = pygame.display.set_mode(screen_resolution)
 
 # head title of game window
-pygame.display.set_caption("Tanks")
+pygame.display.set_caption("Tanks - Game menu")
 
 # set game aktive, pause false, game_end_bu false
 game_active = True
 pause = False
 game_end_bu = False
+start_menu = True
 
 # Set screen updates
 clock = pygame.time.Clock()
 
 # Game Level by start
 LEVEL = 1
-
-# curent Game Level
-current_map = Map_Container.load_Map(LEVEL)
 
 # background game window
 game_window.fill(BLACK)
@@ -156,12 +154,12 @@ font_name = pygame.font.match_font("arial")
 
 # show the pause screen 
 def show_pause_screen():
-    pause_fenster.fill(BLACK)
-    pause_fenster.blit(IMAGE_SCREEN_PAUSE , ([1, 1, 50,50]))
+    game_window.fill(BLACK)
+    game_window.blit(IMAGE_SCREEN_PAUSE , ([1, 1, 50,50]))
 
 def show_game_end_by_user():
-    pause_fenster.fill(BLACK)
-    pause_fenster.blit(IMAGE_SCREEN_GEBU, ([1, 1, 50,50]))
+    game_window.fill(BLACK)
+    game_window.blit(IMAGE_SCREEN_GEBU, ([1, 1, 50,50]))
 
 def do_game_end_by_user():
     global game_active
@@ -176,7 +174,6 @@ def do_game_end_by_user():
                 game_active = False
                 print("GAME END BY USER")
 
-# pause func
 def do_pause():
     global game_active
     show_pause_screen()
@@ -191,10 +188,140 @@ def do_pause():
                 pause = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_2:
+                    SOUND_GAME_PAUSE.stop()
                     warte_zeit = False
 
+# Start and menu Screen will show on start of game or press [esc] in the game 
+def show_start_menu():
+    global start_menu, LEVEL
 
+    show_menu = True
 
+    # play game sound 
+    SOUND_GAME_PAUSE.play(-1) 
+    
+    # light shade of the button  
+    color_light = (170,170,170)  
+  
+    # dark shade of the button  
+    color_dark = (100,100,100)  
+  
+    # stores the width of the  
+    # screen into a variable  
+    width = game_window.get_width()  
+  
+    # stores the height of the  
+    # screen into a variable  
+    height = game_window.get_height()  
+  
+    # defining a font  
+    smallfont = pygame.font.SysFont('Corbel',30)  
+  
+    # rendering a text written in  
+    # this font  
+    text_start = smallfont.render('start' , True , WHITE)
+    text_readme = smallfont.render('readme on Github' , True , WHITE)
+    text_level_1 = smallfont.render('Level 1' , True , WHITE)
+    text_level_2 = smallfont.render('Level 2' , True , WHITE)
+    text_exit = smallfont.render('exit' , True , WHITE)  
+    
+    # button size
+    button_size_on_width = 300
+    button_size_off_width = 270
+    while show_menu:  
+      
+        for event in pygame.event.get():  
+            if event.type == pygame.QUIT:  
+                pygame.quit()  
+
+            #checks if a mouse is clicked  
+            if event.type == pygame.MOUSEBUTTONDOWN:  
+              
+        # START BUTTTON - if the mouse is clicked on the button the start the game  
+                if width/2 <= mouse[0] <= width/2+140 and height/2-250 <= mouse[1] <= height/2+40-250:
+                    SOUND_GAME_PAUSE.stop()
+                    show_menu = False
+        # README BUTTTON -  if the mouse is clicked on the button you can see readme file on github  
+                if width/2 <= mouse[0] <= width/2+140 and height/2-200 <= mouse[1] <= height/2+40-200:  
+                    webbrowser.open('https://github.com/PygameIAV2021/tank_game_py/blob/master/readme.md')
+        # LEVEL-1 BUTTON - if the mouse is clicked on the button you can open the settings blit 
+                if width/2 <= mouse[0] <= width/2+140 and height/2-150 <= mouse[1] <= height/2+40-150:  
+                    pass
+        # LEVEL-2 BUTTON - if the mouse is clicked on the button you can open the settings blit 
+                if width/2 <= mouse[0] <= width/2+140 and height/2-100 <= mouse[1] <= height/2+40-100:
+                    print("level 2")
+                    LEVEL = 2
+        # SETTINGS BUTTON - if the mouse is clicked on the button you can open the settings blit 
+                if width/2 <= mouse[0] <= width/2+140 and height/2+230 <= mouse[1] <= height/2+40+230:
+                    sys.exit(0)
+
+        # fills the screen with a color  
+        #game_window.fill((60,25,60))  
+        game_window.blit(IMAGE_SCREEN_MENU , ([1, 1, 50,50]))
+
+        # stores the (x,y) coordinates into  
+        # the variable as a tuple  
+        mouse = pygame.mouse.get_pos() 
+        
+     # START BUTTON 
+        # if mouse is hovered on a button it  
+        # changes to lighter shade  
+        if width/2 <= mouse[0] <= width/2+140 and height/2-250 <= mouse[1] <= height/2+40-250:  
+            pygame.draw.rect(game_window,GREEN,[width/2,height/2-250,button_size_on_width,40])  
+        else:  
+            pygame.draw.rect(game_window,color_dark,[width/2,height/2-250,button_size_off_width,40])  
+      
+        # positin font in the button the text onto button
+        game_window.blit(text_start , (width/2+50,height/2-250))
+        
+    # README BUTTON
+        # if mouse is hovered on a button it  
+        # changes to lighter shade  
+        if width/2 <= mouse[0] <= width/2+140 and height/2-200 <= mouse[1] <= height/2+40-200:  
+            pygame.draw.rect(game_window,color_light,[width/2,height/2-200,button_size_on_width,40])  
+          
+        else:  
+            pygame.draw.rect(game_window,color_dark,[width/2,height/2-200,button_size_off_width,40])  
+
+        # positin font in the button the text onto button  
+        game_window.blit(text_readme , (width/2+50,height/2-200))
+    # LEVEL 1 BUTTON
+        # if mouse is hovered on a button it  
+        # changes to lighter shade  
+        if width/2 <= mouse[0] <= width/2+140 and height/2-150 <= mouse[1] <= height/2+40-150:  
+            pygame.draw.rect(game_window,color_light,[width/2,height/2-150,button_size_on_width,40])  
+          
+        else:  
+            pygame.draw.rect(game_window,color_dark,[width/2,height/2-150,button_size_off_width,40])  
+
+        # positin font in the button the text onto button  
+        game_window.blit(text_level_1 , (width/2+50,height/2-150))  
+    # LEVEL 2 BUTTON
+        # if mouse is hovered on a button it  
+        # changes to lighter shade  
+        if width/2 <= mouse[0] <= width/2+140 and height/2-100 <= mouse[1] <= height/2+40-100:  
+            pygame.draw.rect(game_window,color_light,[width/2,height/2-100,button_size_on_width,40])  
+          
+        else:  
+            pygame.draw.rect(game_window,color_dark,[width/2,height/2-100,button_size_off_width,40])  
+
+        # positin font in the button the text onto button  
+        game_window.blit(text_level_2 , (width/2+50,height/2-100))  
+
+    # EXIT BUTTON
+        # if mouse is hovered on a button it  
+        # changes to lighter shade  
+        if width/2 <= mouse[0] <= width/2+140 and height/2+230 <= mouse[1] <= height/2+40+230:  
+            pygame.draw.rect(game_window,RED,[width/2,height/2+230,button_size_on_width,40])  
+          
+        else:  
+            pygame.draw.rect(game_window,color_dark,[width/2,height/2+230,button_size_off_width,40])  
+
+        # superimposing the text onto our button  
+        game_window.blit(text_exit , (width/2+50,height/2+230))
+
+        # updates the frames of the game  
+        pygame.display.update()  
 
 class Shot:
     def __init__(self, player_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET ):
@@ -346,7 +473,6 @@ class Opponent:
         #if moving_direction in range(10,25,1):
         #   self.shot_from_opponent(self, self.opponent_tank_direction, self.opponent_tank_column, self.opponent_tank_row)
 
-
 # Calculate correction factor
 def correction_factor(correction_number):
     correction_number = correction_number * MULTIPLER
@@ -438,17 +564,6 @@ def add_opponent_tank_to_level(number_of_opponents):
         opponent = Opponent(opponent_tank_direction, opponent_tank_row, opponent_tank_column, IMAGE_OPONENT_TANK_LEVEL_1 )
         opponent_list.append(opponent)
 
-# depending on the level, the number of opponents differs 
-# Opponents in The currenty map
-    # Level1  = 2 oponents
-    # Level2  = 4 oponents
-if LEVEL == 1:
-    number_of_opponents = 2
-    add_opponent_tank_to_level(number_of_opponents)
-if LEVEL == 2:
-    number_of_opponents = 4
-    add_opponent_tank_to_level(number_of_opponents)
-
 # rotate of tank in deriction
 def player_tank_rotate(tank, player_tank_direction):
     tank = pygame.transform.rotate(tank, player_tank_direction)
@@ -487,9 +602,23 @@ def collision_check_of_shot(shot):
         #    SOUND_HIT.play()
         #    print("owner:", shot.owner, "pos of shot (collision): ", shot.position_column, shot.position_row)
 
-def explosion(row,clumn0):
-    pass #TODO2
+# Start wiht menu screen 
+if start_menu:
+    show_start_menu()
 
+# depending on the level, the number of opponents differs 
+# Opponents in The currenty map
+    # Level1  = 2 oponents
+    # Level2  = 4 oponents
+if LEVEL == 1:
+    number_of_opponents = 2
+    add_opponent_tank_to_level(number_of_opponents)
+if LEVEL == 2:
+    number_of_opponents = 4
+    add_opponent_tank_to_level(number_of_opponents)
+
+# curent Game Level
+current_map = Map_Container.load_Map(LEVEL)
 
 # main game loop
 while game_active:
@@ -556,7 +685,6 @@ while game_active:
             player_column -= 1
         else:
             player_column = player_column
-        # pygame.transform.rotate(IMAGE_PLAYER_TANK_LEVEL_1,90)
     if keys[pygame.K_RIGHT]:  # keyboard key rigt arrow
         if player_tank_direction != RIGHT:  # RIGHT == 270*
             # rotation of the icon player tank
@@ -574,7 +702,6 @@ while game_active:
 
     # shot
     for shot in shot_list:
-
         if shot.shot_move() == False:
             # when the bullet leaves the playing field it should be removed from the list
             shot_list.remove(shot)
@@ -598,7 +725,6 @@ while game_active:
             if current_map[row][column] == 20:
                 current_map[row][column] = BETON_WAL
 
-    
     for shot in shot_list:
         shot.draw()
 
@@ -609,15 +735,11 @@ while game_active:
     for opponent in opponent_list:
         opponent.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
         opponent.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
-    
-    #opponent2.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-    #opponent2.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
-    
+        
     # refresh game window
     pygame.display.flip()
 
     # define refresh times
     clock.tick(FPS)
-
 
 pygame.quit()
