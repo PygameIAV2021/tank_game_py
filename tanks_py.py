@@ -20,6 +20,8 @@ from os import path
 # my Container with Maps
 from Map_Container import Map_Container
 
+enemy_counter = 0
+
 # SHots 
 #from my_shot import Shot
 
@@ -364,10 +366,13 @@ class Shot:
 
 class Opponent:
     def __init__(self, opponent_tank_direction, opponent_tank_row, opponent_tank_column, IMAGE_OPPONENT_TANK_LEVEL_1):
+        global enemy_counter
         self.opponent_tank_direction = opponent_tank_direction
         self.opponent_tank_row = opponent_tank_row
         self.opponent_tank_column = opponent_tank_column
         self.IMAGE_OPPONENT_TANK_LEVEL_1 = IMAGE_OPPONENT_TANK_LEVEL_1
+        self.id = 100 + enemy_counter
+        enemy_counter += 1
 
     # Calculate correction factor
     def correction_factor(self, correction_number):
@@ -383,6 +388,8 @@ class Opponent:
     def moving_opponent_tank(self, opponent_tank_column, opponent_tank_row , opponent_tank_direction):
     # if the tank in the corner they must change direction and call function change direction?. 
     # the chances that it won't stick in the corner are greater....
+        old_column = self.opponent_tank_column
+        old_row = self.opponent_tank_row
         if ( self.opponent_tank_column == 0 and self.opponent_tank_row  == 0 ) and ( 
             self.opponent_tank_direction == UP or self.opponent_tank_direction == LEFT ): # the corner left & up and direction up or left 
                 moving_direction = random.randrange(2, 4, 2)
@@ -425,6 +432,8 @@ class Opponent:
             if (self.opponent_tank_column < FIELDS - 1) and (
                     current_map[self.opponent_tank_row ][self.opponent_tank_column + 1] == EMPTY_PLACE_ON_MAP):
                 self.opponent_tank_column += 1
+        current_map[old_row][old_column] = EMPTY_PLACE_ON_MAP
+        current_map[self.opponent_tank_row][self.opponent_tank_column] = self.id
 
     def change_direction_opponent_tank(self, opponent_tank_direction_fk, moving_direction):
         if moving_direction == 1:
@@ -448,7 +457,7 @@ class Opponent:
                                                                      (RIGHT - self.opponent_tank_direction))
                 self.opponent_tank_direction = RIGHT
 
-    def shot_from_opponent(self, opponent_tank_direction, opponent_tank_column, opponent_tank_row):
+    def shot_from_opponent(self):
         # shot from opponent tank
             owner = 2
             shot = Shot(self.opponent_tank_direction, self.opponent_tank_column, self.opponent_tank_row, owner, current_map, game_window, IMAGE_BULLET)
@@ -461,8 +470,8 @@ class Opponent:
             self.change_direction_opponent_tank( opponent_tank_direction, moving_direction)
         if moving_direction in range(5,81,3):
             self.moving_opponent_tank(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-        #if moving_direction in range(10,25,1):
-        #   self.shot_from_opponent(self, self.opponent_tank_direction, self.opponent_tank_column, self.opponent_tank_row)
+        if moving_direction in range(10,25,1):
+           self.shot_from_opponent()
 
 # Calculate correction factor
 def correction_factor(correction_number):
@@ -531,6 +540,12 @@ def draw_game_element(column, row, element_type):
         game_window.blit(IMAGE_BASE_RE_DOWN, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
+    if element_type >= 100:
+        tank = getOpponentById(element_type)
+
+        game_window.blit(tank.IMAGE_OPPONENT_TANK_LEVEL_1, (
+            [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+             correction_factor(1) - 1]))
 
 # draw player tank
 def draw_player_tank(postion_player_tank_column, postion_player_tank_row):
@@ -546,6 +561,14 @@ opponent_list = []
 
 # explosion list
 explosion_list = []
+
+
+def getOpponentById(id):
+    for opponent in opponent_list: # type: Opponent
+        if id == opponent.id:
+            return opponent
+    return None
+
 
 # insert opponent depending on the map
 def add_opponent_tank_to_level(number_of_opponents):
@@ -644,7 +667,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row - 1][player_column] = '99'
+            current_map[player_row - 1][player_column] = 99
             player_row -= 1
         else:
             player_row = player_row
@@ -658,7 +681,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row + 1][player_column] = '99'
+            current_map[player_row + 1][player_column] = 99
             player_row += 1
         else:
             player_row = player_row
@@ -672,7 +695,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row][player_column - 1] = '99'
+            current_map[player_row][player_column - 1] = 99
             player_column -= 1
         else:
             player_column = player_column
@@ -686,7 +709,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row][player_column + 1] = '99'
+            current_map[player_row][player_column + 1] = 99
             player_column += 1
         else:
             player_column = player_column
@@ -725,7 +748,7 @@ while game_active:
     # draw opponent tank on map
     for opponent in opponent_list:
         opponent.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-        opponent.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
+        #opponent.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
         
     # refresh game window
     pygame.display.flip()
