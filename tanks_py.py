@@ -44,30 +44,39 @@ FPS = 5
 # colors in game
 GRAY = (138, 138, 138)
 BLACK = (0, 0, 0)
+# text color in the button
 WHITE = (255, 255, 255)
-BRICK_COLOR = (143, 38, 0)
+# light for the start button in start menu
 RED = (255, 96,104 )
+# light for the start button in start menu
 GREEN = (51,113,57)
+# light shade of the button in start menu 
+LIGHT = (170,170,170)  
+# dark shade of the button in start menu
+DARK = (100,100,100)  
 # possible directions of tank and shots
 UP = 00
 LEFT = 90
 DOWN = 180
 RIGHT = 270
 
-# MapSymbols
+# MapSymbols 
 EMPTY_PLACE_ON_MAP = 00
-BRICK_WAL = 11
-BETON_WAL = 21
-EXPLOSION_ON_BETON_WALL = 17
-WATER = 32
-BASE_LE_UP = 91
+BRICK_WAL = 11 # brick wall can destroed
+BETON_WAL = 21 # beton wall can't destroed
+EXPLOSION_ON_BETON_WALL = 17 # beton need light explosion with 3 frames
+WATER = 32 # water cannot be driven on but shots go through
+# BASE consists of 4 parts
+BASE_LE_UP = 91 
 BASE_LE_DOWN = 93
 BASE_RE_UP = 92
 BASE_RE_DOWN = 94
+# explosion on this place
 EXPLOSION = 7
+# payer tank is shown in the map
 PLAYER_TANK = 99 # TODO1 use this 
 
-# static game/elements 
+# images for static game/elements 
 IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
 IMAGE_BETON_WALL = pygame.image.load('pic/beton_wall.png')
 IMAGE_WATER = pygame.image.load('pic/watter.png')
@@ -77,7 +86,7 @@ IMAGE_BASE_RE_UP = pygame.image.load('pic/base_re_up.png')
 IMAGE_BASE_RE_DOWN = pygame.image.load('pic/base_re_down.png')
 IMAGE_GROUND_1 = pygame.image.load('pic/ground_1.png')
 
-# dynamic game elements
+# images dynamic game elements
 IMAGE_PLAYER_TANK_LEVEL_1 = pygame.image.load('pic/palyer_tank.png')
 IMAGE_BULLET = pygame.image.load('pic/bullet.png')
 IMAGE_OPONENT_TANK_LEVEL_1 = pygame.image.load('pic/oponent_tank.png')
@@ -92,7 +101,7 @@ SOUND_KEY_MOVING = pygame.mixer.Sound('sounds/key_moving.wav')
 SOUND_ENGINE = pygame.mixer.Sound('sounds/engine_player.wav')
 SOUND_GAME_PAUSE = pygame.mixer.Sound('sounds/game_pause.wav')
 
-# explosion 
+# explosion images
 IMAGE_EXPLOSION_1 = pygame.image.load('dyn_pic/explosion/1.png')
 IMAGE_EXPLOSION_2 = pygame.image.load('dyn_pic/explosion/2.png')
 IMAGE_EXPLOSION_3 = pygame.image.load('dyn_pic/explosion/3.png')
@@ -101,15 +110,14 @@ IMAGE_EXPLOSION_5 = pygame.image.load('dyn_pic/explosion/5.png')
 IMAGE_EXPLOSION_6 = pygame.image.load('dyn_pic/explosion/6.png')
 IMAGE_EXPLOSION_7 = pygame.image.load('dyn_pic/explosion/7.png')
 
-# screen images
+# screen images for pause screen, game end by user GEBU, menu screen
 IMAGE_SCREEN_PAUSE = pygame.image.load('pic/pause.jpg')
 IMAGE_SCREEN_GEBU = pygame.image.load('pic/game_end_by_user.jpg')
 IMAGE_SCREEN_MENU = pygame.image.load('pic/start_screen.jpg')
 
-# screen resolution  
+# screen resolution for my game
 screen_resolution = (1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER)
-# create a game field
-# 120 pix is the place for dashboard
+
 # surface = game_window
 game_window = pygame.display.set_mode(screen_resolution)
 
@@ -117,10 +125,10 @@ game_window = pygame.display.set_mode(screen_resolution)
 pygame.display.set_caption("Tanks - Game menu")
 
 # set game aktive, pause false, game_end_bu false
-game_active = True
-pause = False
-game_end_bu = False
-start_menu = True
+game_active = True  # the game is running
+pause = False       # when a break is made
+game_end_bu = False # game was terminated by user
+start_menu = True   # show start menu
 
 # Set screen updates
 clock = pygame.time.Clock()
@@ -134,7 +142,6 @@ game_window.fill(BLACK)
 # default opponent tank direction
 opponent_tank_direction = DOWN
 
-# default/burn settings for player tank
 # default player direction at start
 player_tank_direction = UP
 
@@ -193,18 +200,14 @@ def do_pause():
 
 # Start and menu Screen will show on start of game or press [esc] in the game 
 def show_start_menu():
+
     global start_menu, LEVEL
 
+    # you need to get into the menu at the start if false the game starts
     show_menu = True
-
-    # play game sound 
+    # play menu sound 
     SOUND_GAME_PAUSE.play(-1) 
-    
-    # light shade of the button  
-    color_light = (170,170,170)  
-  
-    # dark shade of the button  
-    color_dark = (100,100,100)  
+
   
     # stores the width of the  
     # screen into a variable  
@@ -269,7 +272,7 @@ def show_start_menu():
         if width/2 <= mouse[0] <= width/2+140 and height/2-250 <= mouse[1] <= height/2+40-250:  
             pygame.draw.rect(game_window,GREEN,[width/2,height/2-250,button_size_on_width,40])  
         else:  
-            pygame.draw.rect(game_window,color_dark,[width/2,height/2-250,button_size_off_width,40])  
+            pygame.draw.rect(game_window,DARK,[width/2,height/2-250,button_size_off_width,40])  
       
         # positin font in the button the text onto button
         game_window.blit(text_start , (width/2+50,height/2-250))
@@ -278,10 +281,10 @@ def show_start_menu():
         # if mouse is hovered on a button it  
         # changes to lighter shade  
         if width/2 <= mouse[0] <= width/2+140 and height/2-200 <= mouse[1] <= height/2+40-200:  
-            pygame.draw.rect(game_window,color_light,[width/2,height/2-200,button_size_on_width,40])  
+            pygame.draw.rect(game_window,LIGHT,[width/2,height/2-200,button_size_on_width,40])  
           
         else:  
-            pygame.draw.rect(game_window,color_dark,[width/2,height/2-200,button_size_off_width,40])  
+            pygame.draw.rect(game_window,DARK,[width/2,height/2-200,button_size_off_width,40])  
 
         # positin font in the button the text onto button  
         game_window.blit(text_readme , (width/2+50,height/2-200))
@@ -289,10 +292,10 @@ def show_start_menu():
         # if mouse is hovered on a button it  
         # changes to lighter shade  
         if width/2 <= mouse[0] <= width/2+140 and height/2-150 <= mouse[1] <= height/2+40-150:  
-            pygame.draw.rect(game_window,color_light,[width/2,height/2-150,button_size_on_width,40])  
+            pygame.draw.rect(game_window,LIGHT,[width/2,height/2-150,button_size_on_width,40])  
           
         else:  
-            pygame.draw.rect(game_window,color_dark,[width/2,height/2-150,button_size_off_width,40])  
+            pygame.draw.rect(game_window,DARK,[width/2,height/2-150,button_size_off_width,40])  
 
         # positin font in the button the text onto button  
         game_window.blit(text_level_1 , (width/2+50,height/2-150))  
@@ -300,10 +303,10 @@ def show_start_menu():
         # if mouse is hovered on a button it  
         # changes to lighter shade  
         if width/2 <= mouse[0] <= width/2+140 and height/2-100 <= mouse[1] <= height/2+40-100:  
-            pygame.draw.rect(game_window,color_light,[width/2,height/2-100,button_size_on_width,40])  
+            pygame.draw.rect(game_window,LIGHT,[width/2,height/2-100,button_size_on_width,40])  
           
         else:  
-            pygame.draw.rect(game_window,color_dark,[width/2,height/2-100,button_size_off_width,40])  
+            pygame.draw.rect(game_window,DARK,[width/2,height/2-100,button_size_off_width,40])  
 
         # positin font in the button the text onto button  
         game_window.blit(text_level_2 , (width/2+50,height/2-100))  
@@ -315,7 +318,7 @@ def show_start_menu():
             pygame.draw.rect(game_window,RED,[width/2,height/2+230,button_size_on_width,40])  
           
         else:  
-            pygame.draw.rect(game_window,color_dark,[width/2,height/2+230,button_size_off_width,40])  
+            pygame.draw.rect(game_window,DARK,[width/2,height/2+230,button_size_off_width,40])  
 
         # superimposing the text onto our button  
         game_window.blit(text_exit , (width/2+50,height/2+230))
@@ -342,7 +345,6 @@ class Shot:
 
     # the direction of the tank is decisive for firing the shot.
     def shot_move(self):
-        #print("shot is hier", self.position_column, self.position_row)
         if self.shot_direction == UP:
                 self.position_row -= 1
         if self.shot_direction == LEFT:
@@ -383,36 +385,28 @@ class Opponent:
     # the chances that it won't stick in the corner are greater....
         if ( self.opponent_tank_column == 0 and self.opponent_tank_row  == 0 ) and ( 
             self.opponent_tank_direction == UP or self.opponent_tank_direction == LEFT ): # the corner left & up and direction up or left 
-                #print("Ecke oben links")
                 moving_direction = random.randrange(2, 4, 2)
                 self.change_direction_opponent_tank(self.opponent_tank_direction, moving_direction)
         if ( self.opponent_tank_column == (FIELDS - 1) and self.opponent_tank_row  == 0 ) and (
             self.opponent_tank_direction == UP or self.opponent_tank_direction == RIGHT ): # the corner right & up and direction up or right
-                #print("Ecke oben rechts")
                 moving_direction = random.randrange(2, 3, 1)
                 self.change_direction_opponent_tank(self.opponent_tank_direction, moving_direction)
         if ( self.opponent_tank_column == 0 and self.opponent_tank_row  == (FIELDS - 1) ) and ( 
             self.opponent_tank_direction == DOWN or self.opponent_tank_direction == LEFT ): # the corner down & left and direction down or left
-                #print("Ecke unten links")
                 moving_direction = random.randrange(1, 4, 3)
                 self.change_direction_opponent_tank(self.opponent_tank_direction, moving_direction)
         if ( self.opponent_tank_column == (FIELDS - 1) and self.opponent_tank_row  == (FIELDS - 1) ) and (
             self.opponent_tank_direction == DOWN or self.opponent_tank_direction == RIGHT): # the corner down & right and direction down or right 
-                #print("Ecke unten rechts")
                 moving_direction = random.randrange(1, 3, 2)
                 self.change_direction_opponent_tank(self.opponent_tank_direction, moving_direction)
     # if the place in the front of moving tank direktion not empty or rand of map musst the tank change the direction 180 degree
         if ( self.opponent_tank_direction == UP and self.opponent_tank_row  == 0): # direction up and the row is 0 musst the tank turn 
-            #print("wand oben")
             self.change_direction_opponent_tank(self.opponent_tank_direction, 2)
         if ( self.opponent_tank_direction == DOWN and self.opponent_tank_row  == ( FIELDS - 1 )): # direction down and the row is 29 musst the tank turn
-            #print("wand unten")
             self.change_direction_opponent_tank(self.opponent_tank_direction, 1)
         if ( self.opponent_tank_direction == LEFT and self.opponent_tank_column == 0): # direction left and the row is 0 musst the tank turn
-            #print("wand links")
             self.change_direction_opponent_tank(self.opponent_tank_direction, 4)
         if ( self.opponent_tank_direction == RIGHT and self.opponent_tank_column == ( FIELDS - 1 )): # direction right and the row is 29 musst the tank turn
-           #print("wand rechts")
             self.change_direction_opponent_tank(self.opponent_tank_direction, 3)
     # if the place in the tank direction free they can drive in this place 
         if self.opponent_tank_direction == UP:
@@ -433,7 +427,6 @@ class Opponent:
                 self.opponent_tank_column += 1
 
     def change_direction_opponent_tank(self, opponent_tank_direction_fk, moving_direction):
-        #print("Drehe mich nach... direction:",opponent_tank_direction_fk,"moving direction:",moving_direction)
         if moving_direction == 1:
             if opponent_tank_direction_fk != UP:
                 self.IMAGE_OPPONENT_TANK_LEVEL_1 = pygame.transform.rotate(self.IMAGE_OPPONENT_TANK_LEVEL_1,
@@ -462,14 +455,12 @@ class Opponent:
             shot_list.append(shot)
 
     def what_does_the_opponent_want_to_do(self, opponent_tank_column, opponent_tank_row, opponent_tank_direction):
-        #print("column:", opponent_tank_column, "row:", opponent_tank_row, "direction:" ,opponent_tank_direction)
         # in order to increase the likelihood of drelosening, I roll the dice from 1 to 10 only with numbers between 1 and 4 the direction will change
         moving_direction = random.randrange(1, 81)
         if moving_direction in range(1, 5):
             self.change_direction_opponent_tank( opponent_tank_direction, moving_direction)
         if moving_direction in range(5,81,3):
             self.moving_opponent_tank(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-            #print("bewege dich","richtung:",opponent_tank_direction)
         #if moving_direction in range(10,25,1):
         #   self.shot_from_opponent(self, self.opponent_tank_direction, self.opponent_tank_column, self.opponent_tank_row)
 
