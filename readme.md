@@ -12,7 +12,7 @@ The game contain 2 maps. Each map contains different types of terrain and obstac
 
 ![curent screanshot:](https://www.bilder-upload.eu/thumb/f04ed6-1611563806.jpg)
 ![menu:](https://www.bilder-upload.eu/thumb/5b6d4c-1611563776.jpg)
-![pause_screen:]https://www.bilder-upload.eu/thumb/79d6b7-1611563838.jpg)
+![pause_screen:](https://www.bilder-upload.eu/thumb/79d6b7-1611563838.jpg)
 
 Level 1 and the map are done.
 
