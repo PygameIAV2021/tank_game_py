@@ -11,19 +11,15 @@
 #                                                                                               #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
+### ### ### ### ### ### ### ### ### ### IMPORTS  ### ### ### ### ### ### ### ### ### 
 # Import the pygame library
-import pygame, sys, time, random, time, os, webbrowser
+import pygame, sys, random, time, os, webbrowser
 import pygame. freetype
 from pygame.locals import *
 from os import path 
 
 # my Container with Maps
 from Map_Container import Map_Container
-
-enemy_counter = 0
-
-# SHots 
-#from my_shot import Shot
 
 # constant variables for Game
 import pygame
@@ -33,6 +29,11 @@ pygame.init()
 
 # for music
 pygame.mixer.init()
+### ### ### ### ### ### ### ### ### ### END IMPORTS  ### ### ### ### ### ### ### ### 
+
+#####################################################################################
+
+### ### ### ### ### ### ### ### ### ### SETTINGS ### ### ### ### ### ### ### ### ### 
 
 # multipler
 MULTIPLER = 20
@@ -57,6 +58,8 @@ LIGHT = (170,170,170)
 # dark shade of the button in start menu
 DARK = (100,100,100)  
 # possible directions of tank and shots
+
+# the possible directions in which a tank can turn ... in degrees
 UP = 00
 LEFT = 90
 DOWN = 180
@@ -68,15 +71,18 @@ BRICK_WAL = 11 # brick wall can destroed
 BETON_WAL = 21 # beton wall can't destroed
 EXPLOSION_ON_BETON_WALL = 17 # beton need light explosion with 3 frames
 WATER = 32 # water cannot be driven on but shots go through
-# BASE consists of 4 parts
+
+# BASE-Player consists of 4 parts
 BASE_LE_UP = 91 
 BASE_LE_DOWN = 93
 BASE_RE_UP = 92
 BASE_RE_DOWN = 94
+
 # explosion on this place
 EXPLOSION = 7
+
 # payer tank is shown in the map
-PLAYER_TANK = 99 # TODO1 use this 
+PLAYER_TANK = 99 
 
 # images for static game/elements 
 IMAGE_BRICK_WALL = pygame.image.load('pic/brick_wall.png')
@@ -105,6 +111,7 @@ SOUND_GAME_PAUSE = pygame.mixer.Sound('sounds/game_pause.wav')
 SOUND_HIT_FROM_OPPONENT = pygame.mixer.Sound('sounds/hit_from_opponent.wav')
 SOUND_GAME_OVER_SCREEN = pygame.mixer.Sound('sounds/game_over_screen.wav')
 SOUND_OPPONENT_DESTROY = pygame.mixer.Sound('sounds/opponent_hit.mp3')
+
 # explosion images
 IMAGE_EXPLOSION_1 = pygame.image.load('dyn_pic/explosion/1.png')
 IMAGE_EXPLOSION_2 = pygame.image.load('dyn_pic/explosion/2.png')
@@ -159,26 +166,32 @@ player_row = 20
 opponent_tank_column = random.randrange(1, 30, 1)
 opponent_tank_row = 1
 
-# fonts and texts
-def player_name():
-    FONT_1.render_to(world, (4, 4), "Score:", BLACK, None, size=32)
+# opponent counter 
+enemy_counter = 0
 
-font_name = pygame.font.match_font("arial")
+### ### ### ### ### ### ### ### END SETTINGS AND VARIABLES  ### ### ### ### ### ### ### ### 
+
+############################################################################################
+
+### ### ### ### ### ### ### ### ### ### SETTINGS SCREENS ### ### ### ### ### ### ### ### ###
 
 # show the pause screen 
 def show_pause_screen():
     game_window.fill(BLACK)
     game_window.blit(IMAGE_SCREEN_PAUSE , ([1, 1, 50,50]))
 
+# show screen game end by user
 def show_game_end_by_user():
     game_window.fill(BLACK)
     game_window.blit(IMAGE_SCREEN_GEBU, ([1, 1, 50,50]))
 
+# show screen game over
 def show_screen_game_over():
     global game_window
     game_window.fill(BLACK)
     game_window.blit(IMAGE_SCREEN_GAME_OVER, ([1, 1, 50,50]))
 
+# game end by user
 def do_game_end_by_user():
     global game_active
     show_game_end_by_user()
@@ -192,6 +205,7 @@ def do_game_end_by_user():
                 game_active = False
                 print("GAME END BY USER")
 
+# pause 
 def do_pause():
     global game_active
     show_pause_screen()
@@ -209,6 +223,7 @@ def do_pause():
                     SOUND_GAME_PAUSE.stop()
                     warte_zeit = False
 
+# game over
 def do_game_over():
     global game_active, game_over   
     SOUND_GAMEOVER.play()
@@ -216,9 +231,9 @@ def do_game_over():
     game_active = False
     game_over = True 
 
+### ### ### ### ### ### ### ### ### ### END SETTINGS SCREENS ### ### ### ### ### ### ### ### ###
 
-
-
+### ### ### ### ### ### ### ### ### ### GAME MENU ### ### ### ### ### ### ### ### ###
 # Start and menu Screen will show on start of game or press [esc] in the game 
 def show_start_menu():
 
@@ -281,7 +296,6 @@ def show_start_menu():
                     sys.exit(0)
 
         # fills the screen with a color  
-        #game_window.fill((60,25,60))  
         game_window.blit(IMAGE_SCREEN_MENU , ([1, 1, 50,50]))
 
         # stores the (x,y) coordinates into  
@@ -347,6 +361,7 @@ def show_start_menu():
 
         # updates the frames of the game  
         pygame.display.update()  
+### ### ### ### ### ### ### ### ### ### END GAME MENU ### ### ### ### ### ### ### ### ###
 
 class Shot:
     def __init__(self, player_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET ):
@@ -493,13 +508,14 @@ class Opponent:
         if moving_direction in range(10,25,5):
            self.shot_from_opponent()
 
-# Calculate correction factor
+# Calculate correction factor for coordinates
 def correction_factor(correction_number):
     correction_number = correction_number * MULTIPLER
     return correction_number
 
 # draw static game element
 def draw_game_element(column, row, element_type):
+    # EXPLOSION
     if (element_type == 7 or element_type == 20):
         game_window.blit(IMAGE_EXPLOSION_7, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
@@ -528,22 +544,27 @@ def draw_game_element(column, row, element_type):
         game_window.blit(IMAGE_EXPLOSION_1, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
+    # EMPTY PLACE ON MAP
     if (element_type == EMPTY_PLACE_ON_MAP):
         game_window.blit(IMAGE_GROUND_1, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
+    # BRIK WALL
     if (element_type == BRICK_WAL):
         game_window.blit(IMAGE_BRICK_WALL, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
+    # BETON WALL
     if (element_type == BETON_WAL):
         game_window.blit(IMAGE_BETON_WALL, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
+    # WATER
     if (element_type == WATER):
         game_window.blit(IMAGE_WATER, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
          correction_factor(1) - 1]))
+    # BSE FROM PLAYER BY 4 PIX
     if (element_type == BASE_LE_UP):
         game_window.blit(IMAGE_BASE_LE_UP, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
@@ -559,10 +580,10 @@ def draw_game_element(column, row, element_type):
     if (element_type == BASE_RE_DOWN):
         game_window.blit(IMAGE_BASE_RE_DOWN, (
         [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
+    # OPPONENT TANKS
          correction_factor(1) - 1]))
     if element_type >= 100:
         tank = getOpponentById(element_type)
-
         game_window.blit(tank.IMAGE_OPPONENT_TANK_LEVEL_1, (
             [correction_factor(column) + 1, correction_factor(row) + 1, correction_factor(1) - 1,
              correction_factor(1) - 1]))
@@ -602,7 +623,7 @@ def add_opponent_tank_to_level(number_of_opponents):
 def player_tank_rotate(tank, player_tank_direction):
     tank = pygame.transform.rotate(tank, player_tank_direction)
 
-# Collision control
+# Collision control with various dynamic and static elements
 def collision_check_of_shot(shot):
     global shot_list, current_map, game_window, EMPTY_PLACE_ON_MAP, game_active, opponent_list
     if current_map[shot.position_row][shot.position_column] != EMPTY_PLACE_ON_MAP:
@@ -626,10 +647,11 @@ def collision_check_of_shot(shot):
             current_map[shot.position_row][shot.position_column] = 1
             shot_list.remove(shot)
             SOUND_HIT_BRICK.play()
-#        if current_map[shot.position_row][shot.position_column] <= 100:
-#            SOUND_OPPONENT_DESTROY.play()
-#            print("hit")
-        if current_map[shot.position_row][shot.position_column] == 99:
+        if current_map[shot.position_row][shot.position_column] <= 100:
+            if shot.owner == 2:
+                SOUND_OPPONENT_DESTROY.play()
+                print("hit")
+        if current_map[shot.position_row][shot.position_column] == PLAYER_TANK:
             SOUND_HIT_FROM_OPPONENT.play()
             shot_list.remove(shot)
             print("getrofen ")
@@ -671,9 +693,6 @@ while game_active:
         owner = 1
         shot = Shot(player_tank_direction, player_column, player_row, owner, current_map, game_window, IMAGE_BULLET)
         shot_list.append(shot)
-    if keys[pygame.K_1]:  # keyboard key 1 for test shot 
-        print("1 gedrückt test opponent shot")
-        opponent.shot_from_opponent(opponent_tank_direction, opponent_tank_column, opponent_tank_row)
     if keys[pygame.K_2]:  # keyboard key 1 for pause 
         print("2  gedrückt Pause")
         do_pause()
@@ -687,7 +706,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row - 1][player_column] = 99
+            current_map[player_row - 1][player_column] = PLAYER_TANK
             player_row -= 1
         else:
             player_row = player_row
@@ -701,7 +720,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row + 1][player_column] = 99
+            current_map[player_row + 1][player_column] = PLAYER_TANK
             player_row += 1
         else:
             player_row = player_row
@@ -715,7 +734,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row][player_column - 1] = 99
+            current_map[player_row][player_column - 1] = PLAYER_TANK
             player_column -= 1
         else:
             player_column = player_column
@@ -729,7 +748,7 @@ while game_active:
             # check whether the tank is still in the field and the space in front of the tank is empty
             SOUND_KEY_MOVING.play()
             current_map[player_row][player_column] = EMPTY_PLACE_ON_MAP
-            current_map[player_row][player_column + 1] = 99
+            current_map[player_row][player_column + 1] = PLAYER_TANK
             player_column += 1
         else:
             player_column = player_column
@@ -776,10 +795,10 @@ while game_active:
     # define refresh times
     clock.tick(FPS)
 
+# if the tank is destroyed by player us or the base is destroyed
 while game_over:
     show_screen_game_over()
     pygame.display.flip()
     SOUND_GAME_OVER_SCREEN.play(1)
     
-
 pygame.quit()
