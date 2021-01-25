@@ -102,7 +102,9 @@ SOUND_HIT_WATER = pygame.mixer.Sound('sounds/shot_hit_water.wav')
 SOUND_KEY_MOVING = pygame.mixer.Sound('sounds/key_moving.wav')
 SOUND_ENGINE = pygame.mixer.Sound('sounds/engine_player.wav')
 SOUND_GAME_PAUSE = pygame.mixer.Sound('sounds/game_pause.wav')
-
+SOUND_HIT_FROM_OPPONENT = pygame.mixer.Sound('sounds/hit_from_opponent.wav')
+SOUND_GAME_OVER_SCREEN = pygame.mixer.Sound('sounds/game_over_screen.wav')
+SOUND_OPPONENT_DESTROY = pygame.mixer.Sound('sounds/opponent_hit.mp3')
 # explosion images
 IMAGE_EXPLOSION_1 = pygame.image.load('dyn_pic/explosion/1.png')
 IMAGE_EXPLOSION_2 = pygame.image.load('dyn_pic/explosion/2.png')
@@ -116,6 +118,7 @@ IMAGE_EXPLOSION_7 = pygame.image.load('dyn_pic/explosion/7.png')
 IMAGE_SCREEN_PAUSE = pygame.image.load('pic/pause.jpg')
 IMAGE_SCREEN_GEBU = pygame.image.load('pic/game_end_by_user.jpg')
 IMAGE_SCREEN_MENU = pygame.image.load('pic/start_screen.jpg')
+IMAGE_SCREEN_GAME_OVER = pygame.image.load('pic/game_over.jpg')
 
 # screen resolution for my game
 screen_resolution = (1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER)
@@ -131,6 +134,7 @@ game_active = True  # the game is running
 pause = False       # when a break is made
 game_end_bu = False # game was terminated by user
 start_menu = True   # show start menu
+game_over = False
 
 # Set screen updates
 clock = pygame.time.Clock()
@@ -170,6 +174,11 @@ def show_game_end_by_user():
     game_window.fill(BLACK)
     game_window.blit(IMAGE_SCREEN_GEBU, ([1, 1, 50,50]))
 
+def show_screen_game_over():
+    global game_window
+    game_window.fill(BLACK)
+    game_window.blit(IMAGE_SCREEN_GAME_OVER, ([1, 1, 50,50]))
+
 def do_game_end_by_user():
     global game_active
     show_game_end_by_user()
@@ -200,6 +209,16 @@ def do_pause():
                     SOUND_GAME_PAUSE.stop()
                     warte_zeit = False
 
+def do_game_over():
+    global game_active, game_over   
+    SOUND_GAMEOVER.play()
+    time.sleep(2)
+    game_active = False
+    game_over = True 
+
+
+
+
 # Start and menu Screen will show on start of game or press [esc] in the game 
 def show_start_menu():
 
@@ -207,9 +226,9 @@ def show_start_menu():
 
     # you need to get into the menu at the start if false the game starts
     show_menu = True
+
     # play menu sound 
     SOUND_GAME_PAUSE.play(-1) 
-
   
     # stores the width of the  
     # screen into a variable  
@@ -246,6 +265,7 @@ def show_start_menu():
                 if width/2 <= mouse[0] <= width/2+140 and height/2-250 <= mouse[1] <= height/2+40-250:
                     SOUND_GAME_PAUSE.stop()
                     show_menu = False
+                    game_active = True
         # README BUTTTON -  if the mouse is clicked on the button you can see readme file on github  
                 if width/2 <= mouse[0] <= width/2+140 and height/2-200 <= mouse[1] <= height/2+40-200:  
                     webbrowser.open('https://github.com/PygameIAV2021/tank_game_py/blob/master/readme.md')
@@ -470,7 +490,7 @@ class Opponent:
             self.change_direction_opponent_tank( opponent_tank_direction, moving_direction)
         if moving_direction in range(5,81,3):
             self.moving_opponent_tank(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
-        if moving_direction in range(10,25,1):
+        if moving_direction in range(10,25,5):
            self.shot_from_opponent()
 
 # Calculate correction factor
@@ -562,7 +582,7 @@ opponent_list = []
 # explosion list
 explosion_list = []
 
-
+# brauche es um aus der shotliste den richtigen Opponenten zu bestimmen 
 def getOpponentById(id):
     for opponent in opponent_list: # type: Opponent
         if id == opponent.id:
@@ -592,11 +612,9 @@ def collision_check_of_shot(shot):
                         (current_map[shot.position_row][shot.position_column] == BASE_RE_UP)):
             current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
             shot_list.remove(shot)
-            SOUND_HIT_BETTON.play()
             print("GAME OVER")
-            SOUND_GAMEOVER.play()
             time.sleep(1)
-            game_active = False
+            do_game_over()
         if current_map[shot.position_row][shot.position_column] == BETON_WAL:
             current_map[shot.position_row][shot.position_column] = EXPLOSION_ON_BETON_WALL
             shot_list.remove(shot)
@@ -608,13 +626,15 @@ def collision_check_of_shot(shot):
             current_map[shot.position_row][shot.position_column] = 1
             shot_list.remove(shot)
             SOUND_HIT_BRICK.play()
-        if current_map[shot.position_row][shot.position_column] == current_map[opponent.opponent_tank_row][opponent.opponent_tank_column]:
-            print("hit")
-        #else:
-        #    current_map[shot.position_row][shot.position_column] = EMPTY_PLACE_ON_MAP
-        #    shot_list.remove(shot)
-        #    SOUND_HIT.play()
-        #    print("owner:", shot.owner, "pos of shot (collision): ", shot.position_column, shot.position_row)
+#        if current_map[shot.position_row][shot.position_column] <= 100:
+#            SOUND_OPPONENT_DESTROY.play()
+#            print("hit")
+        if current_map[shot.position_row][shot.position_column] == 99:
+            SOUND_HIT_FROM_OPPONENT.play()
+            shot_list.remove(shot)
+            print("getrofen ")
+            time.sleep(1)
+            do_game_over()
 
 # Start wiht menu screen 
 if start_menu:
@@ -755,5 +775,11 @@ while game_active:
 
     # define refresh times
     clock.tick(FPS)
+
+while game_over:
+    show_screen_game_over()
+    pygame.display.flip()
+    SOUND_GAME_OVER_SCREEN.play(1)
+    
 
 pygame.quit()
