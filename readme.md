@@ -10,8 +10,8 @@ The game contain 2 maps. Each map contains different types of terrain and obstac
 ---
 ### 2. Current status
 
-![curent screanshot:](https://i.ibb.co/v1VvBD5/Screenshot-2021-01-13-190142.jpg)
-
+![curent screanshot:](https://www.bilder-upload.eu/thumb/d2f65b-1611563742.jpg)
+![menu:](https://www.bilder-upload.eu/thumb/5b6d4c-1611563776.jpg)
 Level 1 and the map are done.
 
 Static/Immovable elements inserted: wall, beton wall, water, player's staff.
