@@ -69,15 +69,14 @@ The player can select the level and display the readme file or end the game imme
 ~~10.12 Implement stupid boot for oponent tanks <br>~~
 ~~16.12 moving for oponent tank<br>~~
 ~~16.12 bug fix (by shots, moving) from player tank<br>~~
-14.01.21 
-- code maintenance
+14.01.21 ~~code maintenance~~
 ~~opponents burning points flexible~~
 ~~implement sounds~~
 ~~Add opponents to a list~~
 ~~Shots for all opponents correct implement~~
 21.01.21
 ~~code maintenance~~
-- colisions control implement for tanks
+~~colisions control implement for tanks~~
 ~~Pause bildschirm, Game Over bildschirm~~
 
 ### 7. Erweiterungen:
