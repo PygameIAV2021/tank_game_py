@@ -8,9 +8,9 @@ The player controls a tank and shoot projectiles to destroy enemy tanks around t
 The game contain 2 maps. Each map contains different types of terrain and obstacles. Examples include brick walls that can be destroyed by having either the player's tank or an enemy tank shoot at them. Beton walls con not be destroyed, patches of water which cannot be crossed by tanks. 
 
 ---
-### 2. Current status
-
-![curent screanshot:](https://www.bilder-upload.eu/thumb/f04ed6-1611563806.jpg)
+### 2. Current status and screenshots
+![level1:](https://www.bilder-upload.eu/thumb/1871d7-1611564145.jpg)
+![level2t:](https://www.bilder-upload.eu/thumb/f04ed6-1611563806.jpg)
 ![menu:](https://www.bilder-upload.eu/thumb/5b6d4c-1611563776.jpg)
 ![pause_screen:](https://www.bilder-upload.eu/thumb/79d6b7-1611563838.jpg)
 
