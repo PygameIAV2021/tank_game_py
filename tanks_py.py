@@ -193,6 +193,7 @@ def show_screen_game_over():
     game_window.fill(BLACK)
     game_window.blit(IMAGE_SCREEN_GAME_OVER, ([1, 1, 50,50]))
 
+# show screen level win
 def show_level_win():
     global game_window
     game_window.fill(BLACK)
@@ -238,6 +239,7 @@ def do_game_over():
     game_active = False
     game_over = True 
 
+# level ist win 
 def do_level_win():
     global game_active, win_level
     game_active = False
