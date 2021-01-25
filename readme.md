@@ -6,6 +6,7 @@ My first Game
 The player controls a tank and shoot projectiles to destroy enemy tanks around the playfield. The enemy tanks enter from the top of the screen and attempts to destroy the player's base (represented on the screen as a phoenix symbol), as well as the player's tank itself. A level is completed when the player destroys all enemy tanks, but the game ends if the player's base is destroyed or the player hit. The player can destroy the base as well, so the player can still lose even after all enemy tanks are destroyed.
 
 The game contain 2 maps. Each map contains different types of terrain and obstacles. Examples include brick walls that can be destroyed by having either the player's tank or an enemy tank shoot at them. Beton walls con not be destroyed, patches of water which cannot be crossed by tanks. 
+different sounds are played when the shot touches water or concrete or wall.
 
 ---
 ### 2. Current status and screenshots
