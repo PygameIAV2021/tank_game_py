@@ -494,7 +494,7 @@ class Opponent:
 
     def shot_from_opponent(self):
         # shot from opponent tank
-            owner = 2
+            owner = self.id
             shot = Shot(self.opponent_tank_direction, self.opponent_tank_column, self.opponent_tank_row, owner, current_map, game_window, IMAGE_BULLET)
             shot_list.append(shot)
 
@@ -647,9 +647,10 @@ def collision_check_of_shot(shot):
             current_map[shot.position_row][shot.position_column] = 1
             shot_list.remove(shot)
             SOUND_HIT_BRICK.play()
-        if current_map[shot.position_row][shot.position_column] <= 100:
-            if shot.owner == 2:
+        if current_map[shot.position_row][shot.position_column] >= 100:
+            if shot.owner == 1:
                 SOUND_OPPONENT_DESTROY.play()
+                current_map[shot.position_row][shot.position_column] = EXPLOSION_ON_BETON_WALL
                 print("hit")
         if current_map[shot.position_row][shot.position_column] == PLAYER_TANK:
             SOUND_HIT_FROM_OPPONENT.play()
