@@ -126,6 +126,7 @@ IMAGE_SCREEN_PAUSE = pygame.image.load('pic/pause.jpg')
 IMAGE_SCREEN_GEBU = pygame.image.load('pic/game_end_by_user.jpg')
 IMAGE_SCREEN_MENU = pygame.image.load('pic/start_screen.jpg')
 IMAGE_SCREEN_GAME_OVER = pygame.image.load('pic/game_over.jpg')
+IMAGE_SCREEN_WIN_LEVEL = pygame.image.load('pic/level_win.jpg')
 
 # screen resolution for my game
 screen_resolution = (1 + FIELDS * MULTIPLER, FIELDS * MULTIPLER)
@@ -141,7 +142,8 @@ game_active = True  # the game is running
 pause = False       # when a break is made
 game_end_bu = False # game was terminated by user
 start_menu = True   # show start menu
-game_over = False
+game_over = False   # game over screen
+win_level = False
 
 # Set screen updates
 clock = pygame.time.Clock()
@@ -191,6 +193,11 @@ def show_screen_game_over():
     game_window.fill(BLACK)
     game_window.blit(IMAGE_SCREEN_GAME_OVER, ([1, 1, 50,50]))
 
+def show_level_win():
+    global game_window
+    game_window.fill(BLACK)
+    game_window.blit(IMAGE_SCREEN_WIN_LEVEL, ([1, 1, 50,50]))
+     
 # game end by user
 def do_game_end_by_user():
     global game_active
@@ -230,6 +237,12 @@ def do_game_over():
     time.sleep(2)
     game_active = False
     game_over = True 
+
+def do_level_win():
+    global game_active, win_level
+    game_active = False
+    win_level = True
+    show_level_win()
 
 ### ### ### ### ### ### ### ### ### ### END SETTINGS SCREENS ### ### ### ### ### ### ### ### ###
 
@@ -649,15 +662,21 @@ def collision_check_of_shot(shot):
             SOUND_HIT_BRICK.play()
         if current_map[shot.position_row][shot.position_column] >= 100:
             if shot.owner == 1:
+                oppent_tank_id = current_map[shot.position_row][shot.position_column]
+                for o in opponent_list:
+                    if o.id == oppent_tank_id:
+                        opponent_list.remove(o)
+                    break
+                shot_list.remove(shot)
                 SOUND_OPPONENT_DESTROY.play()
-                current_map[shot.position_row][shot.position_column] = EXPLOSION_ON_BETON_WALL
-                print("hit")
+                current_map[shot.position_row][shot.position_column] = 1
         if current_map[shot.position_row][shot.position_column] == PLAYER_TANK:
-            SOUND_HIT_FROM_OPPONENT.play()
-            shot_list.remove(shot)
-            print("getrofen ")
-            time.sleep(1)
-            do_game_over()
+            if shot.owner != 1:
+                SOUND_HIT_FROM_OPPONENT.play()
+                shot_list.remove(shot)
+                print("getrofen ")
+                time.sleep(1)
+                do_game_over()
 
 # Start wiht menu screen 
 if start_menu:
@@ -789,6 +808,10 @@ while game_active:
     for opponent in opponent_list:
         opponent.what_does_the_opponent_want_to_do(opponent_tank_column, opponent_tank_row, opponent_tank_direction)
         #opponent.draw_opponent_tank(opponent_tank_column, opponent_tank_row)
+
+    # if opponetn list empty on this level your win this level
+    if len(opponent_list) <= 0:
+        do_level_win()
         
     # refresh game window
     pygame.display.flip()
@@ -801,5 +824,10 @@ while game_over:
     show_screen_game_over()
     pygame.display.flip()
     SOUND_GAME_OVER_SCREEN.play(1)
-    
+   
+while win_level:
+    do_level_win()
+    pygame.display.flip()
+    SOUND_GAME_OVER_SCREEN.play(1)
+
 pygame.quit()
