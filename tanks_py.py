@@ -668,7 +668,7 @@ def collision_check_of_shot(shot):
                 for o in opponent_list:
                     if o.id == oppent_tank_id:
                         opponent_list.remove(o)
-                    break
+                        break
                 shot_list.remove(shot)
                 SOUND_OPPONENT_DESTROY.play()
                 current_map[shot.position_row][shot.position_column] = 1
